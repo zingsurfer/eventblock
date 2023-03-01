@@ -6,39 +6,38 @@ function ContractBtns({ setValue }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = e => {
-    if (/^\d+$|^$/.test(e.target.value)) {
+    if (/^[\w\-\s]+$/.test(e.target.value)) {
       setInputValue(e.target.value);
     }
   };
 
-  const read = async () => {
-    const value = await contract.methods.read().call({ from: accounts[0] });
+  const title = async () => {
+    const value = await contract.methods.title().call({ from: accounts[0] });
     setValue(value);
   };
 
-  const write = async e => {
+  const updateTitle = async e => {
     if (e.target.tagName === "INPUT") {
       return;
     }
     if (inputValue === "") {
-      alert("Please enter a value to write.");
+      alert("Please enter a title");
       return;
     }
-    const newValue = parseInt(inputValue);
-    await contract.methods.write(newValue).send({ from: accounts[0] });
+    await contract.methods.updateTitle(inputValue).send({ from: accounts[0] });
   };
 
   return (
     <div className="btns">
 
-      <button onClick={read}>
-        read()
+      <button onClick={title}>
+        title()
       </button>
 
-      <div onClick={write} className="input-btn">
-        write(<input
+      <div onClick={updateTitle} className="input-btn">
+        updateTitle(<input
           type="text"
-          placeholder="uint"
+          placeholder="text"
           value={inputValue}
           onChange={handleInputChange}
         />)

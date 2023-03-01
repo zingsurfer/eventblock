@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 
-function Contract({ value }) {
-  const spanEle = useRef(null);
+function Contract({ title }) {
+  const spanEle = useRef("");
 
   useEffect(() => {
     spanEle.current.classList.add("flash");
@@ -11,25 +11,25 @@ function Contract({ value }) {
     return () => {
       clearTimeout(flash);
     };
-  }, [value]);
+  }, [title]);
 
   return (
     <code>
-      {`contract SimpleStorage {
-  uint256 value = `}
+      {`contract Calendar {
+  string title = `}
 
       <span className="secondary-color" ref={spanEle}>
-        <strong>{value}</strong>
+        <strong>{title}</strong>
       </span>
 
       {`;
 
-  function read() public view returns (uint256) {
-    return value;
+  function title() public view returns (string) {
+    return title;
   }
 
-  function write(uint256 newValue) public {
-    value = newValue;
+  function updateTitle(string newTitle) public {
+    title = newTitle;
   }
 }`}
     </code>
