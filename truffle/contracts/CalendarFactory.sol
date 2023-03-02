@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./Calendar.sol";
 import { Clones } from "@openzeppelin/contracts/proxy/Clones.sol";
 
-contract CalendarFactory {
+contract CalendarFactory is Ownable{
   event CalendarAdded(address username, uint id);
 
   address public origin;
@@ -15,7 +16,7 @@ contract CalendarFactory {
     origin = _origin;
   }
 
-  function create() external {
+  function create() external onlyOwner{
     Calendar calendar = Calendar(Clones.clone(origin));
     cloneCount++;
     calendar.init(

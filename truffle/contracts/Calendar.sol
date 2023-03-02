@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-contract Calendar {
+contract Calendar is Ownable {
+  bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+  
   event UpdateTitle(address username, uint calendarID, string title);
   event AddEvent(address username, uint eventID, string title);
   event UpdateEvent(address username, uint eventID, string eventTitle);
@@ -17,8 +19,8 @@ contract Calendar {
     id = _id;
     creator = _creator;
   }
-
-  function updateTitle(string memory _title) external {
+//only owner
+  function updateTitle(string memory _title) external onlyOwner {
     title = _title;
     emit UpdateTitle(msg.sender, id, title);
   }
@@ -37,7 +39,7 @@ contract Calendar {
   mapping(uint => address) eventCreatorIndex;
   mapping(uint => mapping(uint => uint[])) monthEventsIndex;
 
-  function addEvent(string memory eventTitle, uint startTime, uint endTime, uint year, uint month) external {
+  function addEvent(string memory eventTitle, uint startTime, uint endTime, uint year, uint month) external  {
     uint eventID = events.length;
     events.push(Event(eventID, msg.sender, eventTitle, startTime, endTime, false));
     monthEventsIndex[year][month].push(eventID);
@@ -83,14 +85,14 @@ contract Calendar {
     return result;
   }
 
-  function updateEvent(uint eventID, string memory eventTitle) external {
+  function updateEvent(uint eventID, string memory eventTitle) external onlyOwner{
     if(eventCreatorIndex[eventID] == msg.sender) {
       events[eventID].title = eventTitle;
       emit UpdateEvent(msg.sender, eventID, eventTitle);
     }
   }
 
-  function deleteEvent(uint eventID) external {
+  function deleteEvent(uint eventID) external onlyOwner{
     if(eventCreatorIndex[eventID] == msg.sender) {
       events[eventID].isDeleted = true;
       emit DeleteEvent(msg.sender, eventID);
