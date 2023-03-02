@@ -1,0 +1,51 @@
+$lime: rgb(1, 241, 142);
+$turquoise: rgb(0, 199, 200);
+$blue: rgb(0, 162, 249);
+
+button {
+  color: white;
+  font-weight: 700;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+
+  /* Gradient back ground */
+  background-image: linear-gradient(to right, $lime 0%, $turquoise 50%, $blue 100%);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 200% auto;
+}
+
+button:hover {
+  background-position: right center;
+}
+
+footer {
+  font-size: 10px;
+  font-weight: normal;
+  margin-top: 2rem;
+  padding: 1rem;
+
+  div {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+  }
+}
+
+.gradient-text {
+  color: black;
+  background: linear-gradient(to right, $blue, $turquoise, $lime);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo {
+  height: 50px;
+}
