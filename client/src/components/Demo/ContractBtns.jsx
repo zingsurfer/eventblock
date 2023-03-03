@@ -11,7 +11,7 @@ function ContractBtns({ setValue }) {
     }
   };
 
-  const title = async () => {
+  const read = async () => {
     const value = await contract.methods.title().call({ from: accounts[0] });
     setValue(value);
   };
@@ -25,22 +25,21 @@ function ContractBtns({ setValue }) {
       return;
     }
     await contract.methods.updateTitle(inputValue).send({ from: accounts[0] });
+    read();
   };
 
   return (
     <div className="btns">
-
-      <button onClick={title}>
-        title()
-      </button>
-
-      <div onClick={updateTitle} className="input-btn">
-        updateTitle(<input
+      <div className="input-btn">
+        <input
           type="text"
-          placeholder="text"
+          placeholder=""
           value={inputValue}
           onChange={handleInputChange}
         />)
+        <button onClick={updateTitle} id="edit-cal-title-btn">
+          🎨 <span className="underline">Edit title</span>
+        </button>
       </div>
 
     </div>
