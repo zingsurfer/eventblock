@@ -3,9 +3,7 @@ import Days from "./Days";
 import useEth from "../contexts/EthContext/useEth";
 import ContractBtns from "./Demo/ContractBtns";
 
-
 function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direction}`}></i> }
-
 
 const events = [
   {
@@ -30,7 +28,7 @@ function Calendar({ value, setValue }) {
 
   const spanEle = useRef("");
   const [currentDay, setCurrentDay] = useState(new Date())
-  const [showEdit, setShowEdit] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
   const { state } = useEth();
   const [valueLoaded, setValueLoaded] = useState(false);
 
@@ -57,6 +55,11 @@ function Calendar({ value, setValue }) {
       setValueLoaded(true);
     })();
   }, []);
+
+  function showTitleInput() {
+    setIsEditingTitle(true)
+    console.log(isEditingTitle)
+  }
 
   return (
     <>
@@ -89,7 +92,14 @@ function Calendar({ value, setValue }) {
           <div className="logo-container">
             <img className="logo" src="logos/logo-square.png" alt="logo" />
             <h1 className="date"><span className="gradient-text" ref={spanEle}>{value}</span></h1>
-            <ContractBtns setValue={setValue} />
+            {
+              isEditingTitle ?
+              <ContractBtns setValue={setValue} /> :
+              <>
+                <h1 className="date"><span className="gradient-text" ref={spanEle}>{value ? value : "EventBlock"}</span></h1>
+                <button className="input-link" onClick={showTitleInput} ><span className="underline">edit</span></button>
+              </>
+            }
           </div>
           <div className="today-date">
             <div className="event-day">fri</div>

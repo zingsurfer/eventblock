@@ -6,7 +6,7 @@ function ContractBtns({ setValue }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = e => {
-    if (/^[\w\-\s]+$/.test(e.target.value)) {
+    if (/^[a-zA-Z ]*$/.test(e.target.value)) {
       setInputValue(e.target.value);
     }
   };
@@ -30,18 +30,20 @@ function ContractBtns({ setValue }) {
 
   return (
     <div className="btns">
-      <div className="input-btn">
-        <input
-          type="text"
-          placeholder=""
-          value={inputValue}
-          onChange={handleInputChange}
-        />)
-        <button onClick={updateTitle} id="edit-cal-title-btn">
-          🎨 <span className="underline">Edit title</span>
+      <div className="submit-container">
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="Calendar title"
+            value={inputValue}
+            onChange={handleInputChange}
+            className="gradient-text"
+          />
+        </div>
+        <button onClick={updateTitle} id="edit-cal-title-btn" className="btn">
+          <span className="underline">Submit</span>
         </button>
       </div>
-
     </div>
   );
 }
