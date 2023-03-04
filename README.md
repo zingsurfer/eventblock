@@ -21,8 +21,6 @@
 BudilBox submission:
 - [https://app.buidlbox.io/projects/eventblock](https://app.buidlbox.io/projects/eventblock)
 
-![EventBlock at ETHDenver](https://i.imgur.com/XGqgse3.mp4)
-
 # Tech
 EventBlock was built with:
 - [Aurora](https://aurora.dev/)
