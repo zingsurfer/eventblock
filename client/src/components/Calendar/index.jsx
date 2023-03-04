@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Days from "./Days";
-import useEth from "../contexts/EthContext/useEth";
-import ContractBtns from "./Demo/ContractBtns";
+import useEth from "../../contexts/EthContext/useEth";
+import ContractBtns from "./ContractBtns";
 
 function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direction}`}></i> }
 
