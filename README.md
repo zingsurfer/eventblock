@@ -16,10 +16,12 @@
 <br/>
 
 # About
-[EventBlock.io](https://EventBlock.io/) is a decentralized calendar dApp with editable events stored on-chain. It is built with custom solidity and Open Zeplin authentication, deployed on Near via Aurora bridge, and has a front-end in React deployed on CloudFlare Pages. EventBlock can be used by DAOs to mint a calendar for community events, track governance, and follow NFT mints. The team is applying for various bounties, including deploying a dApp on an L2 using Infura and Truffle, and deploying a decentralized frontend component for any Ethereum project or hack.
+[EventBlock.io](https://EventBlock.io/) is a decentralized calendar dApp with editable events stored on-chain. It is built with custom solidity and Open Zeplin authentication, deployed on Near via Aurora bridge, works with MetaMask, and has a front-end in React deployed on [Netlify](https://www.netlify.com/). EventBlock can be used by DAOs to mint a calendar for community events, track governance, and follow NFT mints. The team is applying for various bounties, including deploying a dApp on an L2 using Infura and Truffle, and deploying a decentralized frontend component for any Ethereum project or hack on Aurora. 
 
 BudilBox submission:
 - [https://app.buidlbox.io/projects/eventblock](https://app.buidlbox.io/projects/eventblock)
+
+![EventBlock at ETHDenver](https://i.imgur.com/XGqgse3.mp4)
 
 # Tech
 EventBlock was built with:
