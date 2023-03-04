@@ -16,7 +16,10 @@
 <br/>
 
 # About
-🚧🔨 Coming soon
+[EventBlock.io](https://EventBlock.io/) is a decentralized calendar dApp with editable events stored on-chain. It is built with custom solidity and Open Zeplin authentication, deployed on Near via Aurora bridge, and has a front-end in React deployed on CloudFlare Pages. EventBlock can be used by DAOs to mint a calendar for community events, track governance, and follow NFT mints. The team is applying for various bounties, including deploying a dApp on an L2 using Infura and Truffle, and deploying a decentralized frontend component for any Ethereum project or hack.
+
+BudilBox submission:
+- [https://app.buidlbox.io/projects/eventblock](https://app.buidlbox.io/projects/eventblock)
 
 # Tech
 EventBlock was built with:
@@ -28,6 +31,18 @@ EventBlock was built with:
 - [Solidity](https://soliditylang.org/)
 - [Truffle](https://trufflesuite.com)
 - [Webpack](https://webpack.js.org)
+
+# Production
+This project is deployed on [Netlify](https://www.netlify.com/) with contiunus integration support via Github. 
+
+Build arguments in the Netlify deploy:
+```sh
+build && XYZ
+```
+Set enviorment varriables in the Netlify Build:
+```sh
+INFURA_KEY=
+```
 
 # Development
 This project includes a Makefile. Run `make` to list all available commands.
@@ -80,3 +95,17 @@ Run `make start_client`.
 
 ## Testing
 Run `make test`.
+
+
+# Challenges faced
+Truffle and Ganeche were very easy to work with. Our challenges arose when we trying to deploy to Netlify and adjusting the process from localhost. 
+
+# Bounties
+-  OpenZeppelin Defender Integration
+[https://docs.openzeppelin.com/defender/](https://docs.openzeppelin.com/defender/)
+
+-  Open Aurora Bounty
+
+-  Deploy a Dapp on an L2 using Infura and Truffle
+
+-  Use the Truffle React Box to deploy a dapp on Infura  
