@@ -162,8 +162,24 @@ body {
     box-shadow: 0 0 10px 2px var(--primary-theme);
   }
 
-  .calendar .days .today {
+  .calendar .days .selected-month {
     font-size: 2rem;
+  }
+
+  .today {
+    p {
+        border-bottom: 8px double rgba(1, 241, 142, 0.4);
+        padding: 5px;
+        border-radius: 2px;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+      }
+  }
+
+  .today.active {
+    p {
+      border-bottom: 8px double var(--lime);
+    }
   }
 
   .calendar .days .event {
@@ -590,7 +606,7 @@ body {
     }
 
     .calendar .days .day.active,
-    .calendar .days .day.today {
+    .calendar .days .day.selected-month {
       font-size: 1rem;
     }
 

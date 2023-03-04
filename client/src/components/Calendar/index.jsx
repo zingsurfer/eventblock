@@ -26,14 +26,13 @@ const events = [
 function Calendar({ value, setValue }) {
   const { state: { contract, accounts } } = useEth();
 
-  const spanEle = useRef("");
-  const [currentDay, setCurrentDay] = useState(new Date())
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const { state } = useEth();
   const [valueLoaded, setValueLoaded] = useState(false);
 
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const spanEle = useRef("");
+  const currentDay = new Date();
 
   useEffect(() => {
     spanEle.current.classList.add("flash");
@@ -48,9 +47,7 @@ function Calendar({ value, setValue }) {
 
   useEffect(() => {
     (async () => {
-      setValueLoaded(false);
       let res = await contract.methods.title().call({ from: accounts[0] })
-      console.log(res)
       setValue(res)
       setValueLoaded(true);
     })();
@@ -78,7 +75,7 @@ function Calendar({ value, setValue }) {
                 })
               }
             </div>
-            <Days day={currentDay} />
+            <Days />
             <div className="goto-today">
               <button className="today-btn">Today</button>
               <div className="goto">
@@ -91,7 +88,6 @@ function Calendar({ value, setValue }) {
         <div className="right">
           <div className="logo-container">
             <img className="logo" src="logos/logo-square.png" alt="logo" />
-            <h1 className="date"><span className="gradient-text" ref={spanEle}>{value}</span></h1>
             {
               isEditingTitle ?
               <ContractBtns setValue={setValue} /> :
