@@ -10,6 +10,7 @@
     "@optionality.io/clone-factory": "^0.2.1",
     "@truffle/hdwallet-provider": "^2.1.7",
     "dotenv": "^16.0.3",
+    "truffle": "^5.7.9",
     "truffle-assertions": "^0.9.2"
   }
 }
