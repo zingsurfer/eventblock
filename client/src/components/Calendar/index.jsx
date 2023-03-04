@@ -119,7 +119,7 @@ function Calendar({ value, setValue }) {
         </div>
         <div className="right">
           <div className="logo-container">
-            <img className="logo" src="logos/logo-square.png" alt="logo" />
+            <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
             {
               isEditingTitle ?
               <ContractBtns setValue={setValue} /> :
