@@ -2,37 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import Days from "./Days";
 import useEth from "../../contexts/EthContext/useEth";
 import ContractBtns from "./ContractBtns";
+import Demo from "./Demo";
 
 function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direction}`}></i> }
-
-const events = [
-  {
-    day: 13,
-    month: 3,
-    year: 2023,
-    events: [
-      {
-        title: "Event 1 lorem ipsun dolar sit genfa tersd dsad ",
-        time: "10:00 AM",
-      },
-      {
-        title: "Event 2",
-        time: "11:00 AM",
-      },
-    ],
-  },
-];
 
 function Calendar({ value, setValue }) {
   const { state: { contract, accounts } } = useEth();
 
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [valueLoaded, setValueLoaded] = useState(false);
-
+  const [selectedDay, setSelectedDay] = useState(new Date());
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const spanEle = useRef("");
-  const currentDay = new Date();
+
 
   useEffect(() => {
     spanEle.current.classList.add("flash");
@@ -55,8 +38,57 @@ function Calendar({ value, setValue }) {
 
   function showTitleInput() {
     setIsEditingTitle(true)
-    console.log(isEditingTitle)
   }
+
+  const sortEvents = (selectedEvents) => {
+    selectedEvents.sort(({ a, b }) => {
+      return a.startTime - b.startTime;
+    });
+  }
+
+  const firstDay = () => {
+    let day = new Date(selectedDay.getFullYear(), selectedDay.getMonth(), 1);
+    const weekdayOfDay = day.getDay();
+    const firstDayWeekDay = 6 - weekdayOfDay;
+
+    day.setDate(day.getDate() - firstDayWeekDay);
+
+    return day;
+  }
+
+  const lastDay = () => {
+    let day = new Date(selectedDay.getFullYear(), selectedDay.getMonth() + 1, 0); // last day of current month
+    const weekdayOfDay = day.getDay();
+
+    day.setDate(day.getDate() + ((6 - weekdayOfDay) + 7));
+
+    return day
+  }
+
+  const allEvents = Demo();
+  allEvents.forEach(evt => {
+    console.log(`event: ${JSON.stringify(evt)}`)
+    // const e = JSON.parse(evt)
+    console.log(evt.title)
+  })
+
+  const events = () => {
+    let selectedEvents = []
+    allEvents.forEach(evt => {
+      // const e = JSON.parse(evt)
+      console.log(evt.title)
+      const startDate = new Date(evt.startTime * 1000)
+
+      if (startDate >= firstDay() && startDate <= lastDay()) {
+        selectedEvents.push(evt)
+      }
+    })
+
+    return selectedEvents
+  }
+
+  console.log(`lastday: ${lastDay()}`)
+  console.log(`firstday: ${firstDay()}`)
 
   return (
     <>
@@ -65,7 +97,7 @@ function Calendar({ value, setValue }) {
           <div className="calendar">
             <div className="month">
               <Arrow direction="previous"/>
-              <h1 className="date">{months[currentDay.getMonth()]} <span className="gradient-text">{currentDay.getFullYear()}</span></h1>
+              <h1 className="date">{months[selectedDay.getMonth()]} <span className="gradient-text">{selectedDay.getFullYear()}</span></h1>
               <Arrow direction="next"/>
             </div>
             <div className="weekdays">
@@ -97,11 +129,18 @@ function Calendar({ value, setValue }) {
               </>
             }
           </div>
-          <div className="today-date">
-            <div className="event-day">fri</div>
-            <div className="event-date">30th may 2022</div>
+          <div className="events">
+            {
+              events().map((evt) => {
+                return (
+                  <div className="today-date" key={`event-${evt.id}`}>
+                    <div className="event-title">{evt.title}</div>
+                    <div className="event-description">{evt.description}</div>
+                  </div>
+                )
+              })
+            }
           </div>
-          <div className="events"></div>
           <div className="add-event-wrapper">
             <div className="add-event-header">
               <div className="title">Add Event</div>
