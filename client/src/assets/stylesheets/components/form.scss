@@ -1,0 +1,38 @@
+.submit-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-end;
+
+  input {
+    border: 0;
+    border-bottom: 1px solid var(--primary-theme);
+    outline: 0;
+    font-size: 2rem;
+    padding: 0;
+    width: 150px;
+    transition: border-color 0.2s;
+    caret-color: var(--secondary-theme);
+
+    &::placeholder {
+      color: rgba(0, 199, 200, 0.42);
+    }
+  }
+
+
+  input:focus {
+    padding-bottom: 6px;
+    border-width: 2px;
+    border-image: linear-gradient(to right, var(--lime), var(--blue));
+    border-image-slice: 1;
+  }
+
+  /* reset input */
+  label {
+    &:required,
+    &:invalid {
+      box-shadow: none;
+    }
+  }
+}
+

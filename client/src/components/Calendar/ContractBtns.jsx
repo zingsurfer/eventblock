@@ -6,12 +6,12 @@ function ContractBtns({ setValue }) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = e => {
-    if (/^[\w\-\s]+$/.test(e.target.value)) {
+    if (/^[a-zA-Z ]*$/.test(e.target.value)) {
       setInputValue(e.target.value);
     }
   };
 
-  const title = async () => {
+  const read = async () => {
     const value = await contract.methods.title().call({ from: accounts[0] });
     setValue(value);
   };
@@ -25,24 +25,25 @@ function ContractBtns({ setValue }) {
       return;
     }
     await contract.methods.updateTitle(inputValue).send({ from: accounts[0] });
+    read();
   };
 
   return (
     <div className="btns">
-
-      <button onClick={title}>
-        title()
-      </button>
-
-      <div onClick={updateTitle} className="input-btn">
-        updateTitle(<input
-          type="text"
-          placeholder="text"
-          value={inputValue}
-          onChange={handleInputChange}
-        />)
+      <div className="submit-container">
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="Calendar title"
+            value={inputValue}
+            onChange={handleInputChange}
+            className="gradient-text"
+          />
+        </div>
+        <button onClick={updateTitle} id="edit-cal-title-btn" className="btn">
+          <span className="underline">Submit</span>
+        </button>
       </div>
-
     </div>
   );
 }

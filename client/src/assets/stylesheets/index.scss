@@ -1,0 +1,23 @@
+@import "components/theme";
+@import "components/calendar";
+@import "components/form";
+@import "components/toast";
+
+html {
+  font-size: 12px;
+}
+
+:root {
+  --lime: rgb(1, 241, 142);
+  --turquoise: rgb(0, 199, 200);
+  --blue: rgb(0, 162, 249);
+  --primary-theme: var(--turquoise);
+  --secondary-theme: var(--lime);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}

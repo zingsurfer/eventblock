@@ -1,0 +1,79 @@
+button:hover {
+  /* Gradient background */
+  background-image: linear-gradient(to right, var(--lime) 0%, var(--turquoise) 50%, var(--blue) 100%);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 200% auto;
+  color:white
+}
+
+button {
+  padding: 5px 10px;
+  border: 1px solid var(--primary-theme);
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+  color: var(--primary-theme);
+}
+
+footer {
+  font-size: 10px;
+  font-weight: normal;
+  margin-top: 2rem;
+  padding: 1rem;
+
+  div {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1rem;
+  }
+}
+
+.gradient-text {
+  color: black;
+  background: linear-gradient(to left, var(--blue), var(--turquoise), var(--lime));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.logo {
+  height: 50px;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 20px 0 0 70px;
+}
+
+.input-link {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #878895;
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  cursor: pointer;
+  margin: 0 1rem;
+
+  .underline {
+    border-bottom: 1px solid #878895;
+  }
+
+  button,
+  input[type="submit"],
+  input[type="reset"] {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
+}
