@@ -79,6 +79,34 @@ module.exports = {
       network_id: 0x4e454153, // Aurora testnet ID
       gas: 10000000
     },
+    polygon: {
+      provider: () =>
+        new HDWalletProvider(
+          MNEMONIC,
+          `https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`
+        ),
+      network_id: 137, // polymain  ID
+      networkCheckTimeoutnetworkCheckTimeout: 10000,
+      timeoutBlocks: 200,
+      gas: 10000000
+    },
+    polygontest: {
+      provider: () =>
+        new HDWalletProvider(
+          MNEMONIC,
+          `https://rpc-mumbai.maticvigil.com/v3/${INFURA_KEY}`
+        ),
+      network_id: 80001, // Aurora testnet ID
+      gas: 10000000
+    },
+    matic: {
+      provider: () => new HDWalletProvider(MNEMONIC, `https://rpc-mumbai.maticvigil.com`),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true
+    },
+    
     //
     // An additional network, but with some advanced options…
     // advanced: {
