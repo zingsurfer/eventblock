@@ -12,6 +12,7 @@ function Footer() {
         <Link uri={"https://soliditylang.org"} text={"Solidity"} />
         <Link uri={"https://ethereum.org"} text={"Ethereum"} />
         <Link uri={"https://www.flaticon.com/free-icon/calendar_1177433"} text={"Icon by Freepik - Flaticon"} />
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfAdW1uwsAnV8egL3LDhojewYzCKx1rS2LzyBqcEYfDR6E-rQ/viewform?embedded=true" width="640" height="542" frameborder="0" marginheight="0" marginwidth="0">Contact</iframe>
       </div>
     </footer >
   );
