@@ -23,6 +23,9 @@
 BuidlBox submission:
 - [https://app.buidlbox.io/projects/eventblock](https://app.buidlbox.io/projects/eventblock)
 
+Demo Gif:
+[![EventBlock.io in Action](https://i.imgur.com/4RHSdDr.gif)](https://i.imgur.com/4RHSdDr.gif)
+
 Youtube link:
 
 [![EventBlock.io ETHDenver 2023 Pitch](https://img.youtube.com/vi/J-scP5i8CUM/0.jpg)](https://www.youtube.com/watch?v=J-scP5i8CUM)
