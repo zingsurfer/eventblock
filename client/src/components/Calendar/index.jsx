@@ -144,7 +144,7 @@ function Calendar() {
                       className="gradient-text"
                     />
                   </div>
-                  <div>
+                  <div style={{display:"flex"}}>
                     <button onClick={updateTitle} id="edit-cal-title-btn" className="btn">
                       <span className="underline">Submit</span>
                     </button>
