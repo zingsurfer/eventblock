@@ -12,6 +12,7 @@ function EthProvider({ children }) {
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
         const accounts = await web3.eth.requestAccounts();
         const networkID = await web3.eth.net.getId();
+        console.log(`networkID: ${networkID}`)
         const { abi } = artifact;
         let address, contract;
         try {
@@ -30,7 +31,12 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const artifact = require("../../contracts/Calendar.json");
+        const env = process.env.REACT_APP_CONTRACT_ENV
+        console.log(`CONTRACT_ENV=${env}`)
+
+        const artifact = (env === "production") ?
+          require("../../verifiedContracts/Calendar.json") :
+          require("../../contracts/Calendar.json");
         init(artifact);
       } catch (err) {
         console.error(err);
