@@ -11,6 +11,7 @@ function Calendar() {
   const [title, setTitle] = useState("EventBlock");
   const [titleInput, setTitleInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isAddingEvent, setIsAddingEvent] = useState(false);
 
   const [selectedDay, setSelectedDay] = useState(new Date());
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -102,6 +103,10 @@ function Calendar() {
     setIsEditingTitle(false);
   }
 
+  const toggleNewEventForm = () => {
+    setIsAddingEvent(!(isAddingEvent));
+  }
+
   return (
     <>
       <div id="cal" className="container">
@@ -145,10 +150,10 @@ function Calendar() {
                     />
                   </div>
                   <div style={{display:"flex"}}>
-                    <button onClick={updateTitle} id="edit-cal-title-btn" className="btn">
+                    <button onClick={updateTitle} className="btn button-space">
                       <span className="underline">Submit</span>
                     </button>
-                    <button onClick={cancelTitleUpdate} id="edit-cal-title-btn" className="btn">
+                    <button onClick={cancelTitleUpdate} className="btn button-space">
                       <span className="underline">Cancel</span>
                     </button>
                   </div>
@@ -161,27 +166,58 @@ function Calendar() {
             </div>
           </div>
           <div className="events" style={{height: "100vh"}}>
-            <div className="today-date">
-              <div className="event-date">
-                <h2>
-                  {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
-                </h2>
-                <button className="event-btn">Add Event</button>
-              </div>
-              {
-                events().map((evt) => {
-                  return (
-                    <div style={{display:"flex", flexDirection:"row", paddingTop:"1.5rem"}}>
-                      <span style={{ marginRight: "1rem" }}>⬜️</span>
-                      <div key={`event-${evt.id}`}>
-                        <h3 className="event-title">{evt.title}</h3>
-                        <div className="event-description">{evt.description}</div>
+            {
+              // true ?
+              isAddingEvent ?
+              <div className="today-date">
+                <div className="event-date">
+                  <h2>
+                      New event <span style={{ fontWeight: 400}}>
+                        on {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
+                      </span>
+                  </h2>
+                  <div>
+                    <button className="event-btn--create button-space" onClick={toggleNewEventForm}>Submit</button>
+                    <button className="event-btn--cancel" onClick={toggleNewEventForm}>Cancel</button>
+                  </div>
+                </div>
+                <div className="submit-container event-form">
+                  <div className="event-form--title">
+                    <label className="event-form--label">Title:</label>
+                    <input
+                      type="text"
+                      placeholder=""
+                      value={titleInput}
+                      onChange={handleInputChange}
+                      style={{background:"transparent"}}
+                    />
+                  </div>
+                </div>
+              </div> :
+              <div className="today-date">
+                <div className="event-date">
+                  <h2>
+                    {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
+                  </h2>
+                  <button className="event-btn--new" onClick={toggleNewEventForm}>Add Event</button>
+                </div>
+                {
+                  events().map((evt) => {
+                    const eventTitle = evt.title.substring(0, 37)
+                    const eventDescription = evt.title.substring(37)
+                    return (
+                      <div style={{display:"flex", flexDirection:"row", paddingTop:"1.5rem"}}>
+                        <span style={{ marginRight: "1rem" }}>⬜️</span>
+                        <div key={`event-${evt.id}`}>
+                          <h3 className="event-title">{eventTitle} . . .</h3>
+                          <div className="event-description">...{eventDescription}</div>
+                        </div>
                       </div>
-                    </div>
-                    )
-                  })
-                }
-            </div>
+                      )
+                    })
+                  }
+                </div>
+            }
           </div>
           <div className="add-event-wrapper">
             <div className="add-event-header">

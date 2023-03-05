@@ -36,3 +36,23 @@
   }
 }
 
+.event-form {
+  margin: 2rem 0;
+}
+
+.event-form--title {
+  width: 100%;
+
+  input {
+    color: #f0fdfa;
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #9CA3AF;
+    padding: 10px 7px 2px 7px;
+    margin-top: 0.5rem;
+  }
+}
+
+.event-form--label {
+  font-size: 16px;
+}

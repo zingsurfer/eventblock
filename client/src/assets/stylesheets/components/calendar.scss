@@ -9,7 +9,7 @@ body {
   // color: rgb(0,231,139);
 }
 
-#edit-cal-title-btn {
+.button-space {
   margin-right: 1rem;
 }
 
@@ -560,7 +560,7 @@ body {
   color: #f0fdfa;
 }
 
-.event-btn {
+.event-btn--new {
   color: #f0fdfa;
   border: 1px solid #f0fdfa;
   font-weight: 700;
@@ -568,6 +568,30 @@ body {
   &:hover {
     color: var(--dark-background);
     background-color: #f0fdfa;
+  }
+}
+
+.event-btn--create {
+  color: #f0fdfa;
+  border: 1px solid #f0fdfa;
+  font-weight: 700;
+
+  &:hover {
+    color: var(--lime);
+    background-color: transparent;
+    border: 1px solid var(--lime);
+  }
+}
+
+.event-btn--cancel {
+  color: #9CA3AF;
+  border: 1px solid #9CA3AF;
+  font-weight: 700;
+
+  &:hover {
+    color: red;
+    background-color: transparent;
+    border: 1px solid red;
   }
 }
 
