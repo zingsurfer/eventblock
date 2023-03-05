@@ -1,40 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import Days from "./Days";
 import useEth from "../../contexts/EthContext/useEth";
-import ContractBtns from "./ContractBtns";
 import Demo from "./Demo";
 
 function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direction}`}></i> }
 
-function Calendar({ value, setValue }) {
+function Calendar() {
   const { state: { contract, accounts } } = useEth();
 
+  const [title, setTitle] = useState("EventBlock");
+  const [titleInput, setTitleInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [valueLoaded, setValueLoaded] = useState(false);
+
   const [selectedDay, setSelectedDay] = useState(new Date());
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const spanEle = useRef("");
-
-
-  useEffect(() => {
-    spanEle.current.classList.add("flash");
-    const flash = setTimeout(() => {
-      spanEle.current.classList.remove("flash");
-    }, 300);
-    return () => {
-      clearTimeout(flash);
-    };
-  }, [value]);
-
+  const spanEle = useRef(null);
 
   useEffect(() => {
-    (async () => {
-      let res = await contract.methods.title().call({ from: accounts[0] })
-      setValue(res)
-      setValueLoaded(true);
-    })();
-  }, []);
+    setIsEditingTitle(false)
+  }, [title]);
 
   function showTitleInput() {
     setIsEditingTitle(true)
@@ -90,6 +75,33 @@ function Calendar({ value, setValue }) {
   console.log(`lastday: ${lastDay()}`)
   console.log(`firstday: ${firstDay()}`)
 
+  const handleInputChange = e => {
+    if (/^[a-zA-Z ]*$/.test(e.target.value)) {
+      setTitleInput(e.target.value);
+    }
+  };
+
+  const read = async () => {
+    const value = await contract.methods.title().call({ from: accounts[0] });
+    console.log(`read: ${value}`);
+  };
+
+  const updateTitle = async e => {
+    if (e.target.tagName === "INPUT") {
+      return;
+    }
+    if (titleInput === "") {
+      alert("Please enter a title");
+      return;
+    }
+    setTitle(titleInput);
+    await contract.methods.updateTitle(titleInput).send({ from: accounts[0] });
+  };
+
+  const cancelTitleUpdate = () => {
+    setIsEditingTitle(false);
+  }
+
   return (
     <>
       <div id="cal" className="container">
@@ -119,22 +131,42 @@ function Calendar({ value, setValue }) {
         </div>
         <div className="right">
           <div className="logo-container">
-            <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
-            {
-              isEditingTitle ?
-              <ContractBtns setValue={setValue} /> :
-              <>
-                <h1 className="date"><span className="gradient-text" ref={spanEle}>{value ? value : "EventBlock"}</span></h1>
+            <div style={{"grid-column": "container"}}>
+              <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
+              <div className={`btns title-input-buttons ${isEditingTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
+                <div className="submit-container">
+                  <div className="input-container">
+                    <input
+                      type="text"
+                      placeholder="Calendar title"
+                      value={titleInput}
+                      onChange={handleInputChange}
+                      className="gradient-text"
+                    />
+                  </div>
+                  <div>
+                    <button onClick={updateTitle} id="edit-cal-title-btn" className="btn">
+                      <span className="underline">Submit</span>
+                    </button>
+                    <button onClick={cancelTitleUpdate} id="edit-cal-title-btn" className="btn">
+                      <span className="underline">Cancel</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className={`calendar-title ${isEditingTitle ? "hidden" : "title" }`}>
+                <h1 className="date"><span className="gradient-text" ref={spanEle}>{title}</span></h1>
                 <button className="input-link" onClick={showTitleInput} ><span className="underline">edit</span></button>
-              </>
-            }
+              </div>
+            </div>
           </div>
-          <div className="events">
+          <div className="events" style={{height: "100vh"}}>
             {
               events().map((evt) => {
                 return (
                   <div className="today-date" key={`event-${evt.id}`}>
-                    <div className="event-title">{evt.title}</div>
+                    <div className="event-date">{weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}</div>
+                    <h3 className="event-title">{evt.title}</h3>
                     <div className="event-description">{evt.description}</div>
                   </div>
                 )

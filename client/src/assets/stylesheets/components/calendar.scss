@@ -9,6 +9,10 @@ body {
   // color: rgb(0,231,139);
 }
 
+#edit-cal-title-btn {
+  margin-right: 1rem;
+}
+
 #cal {
   display: flex;
   min-height: 850px;
@@ -260,47 +264,38 @@ body {
   }
 
   .right .today-date {
-    width: 100%;
-    height: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 40px;
-    padding-left: 70px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    grid-column: container;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 
-  .right .today-date .event-title {
+  .right .today-date .event-date {
     font-size: 2rem;
     font-weight: 500;
+  }
+
+  .event-title {
+    padding-top: 1rem;
   }
 
   .right .today-date .event-description {
     font-size: 1rem;
     font-weight: 400;
     color: #878895;
+    margin: 1rem 0px;
   }
 
   .events {
     width: 40vw;
-    height: 100%;
-    max-height: 600px;
-    flex-flow: column wrap;
-    display: flex;
-    padding-left: 4px;
+    display: grid;
+    grid-template-columns:
+        [viewport-start] minmax(1em, 1fr)
+        [container-start] minmax(0, 42em)
+        [container-end] minmax(1em, 1fr) [viewport-end];
   }
 
   .events .event {
-    position: relative;
     width: 95%;
-    min-height: 70px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
     padding: 0 20px;
     padding-left: 50px;
     color: #fff;
@@ -323,7 +318,7 @@ body {
     pointer-events: none;
   }
 
-  .events .event .title .event-title {
+  .events .event .title .event-date {
     font-size: 1rem;
     font-weight: 400;
     margin-left: 20px;

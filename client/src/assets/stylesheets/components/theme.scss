@@ -30,6 +30,11 @@ footer {
   }
 }
 
+.hidden {
+  display: none;
+  width: 0px;
+}
+
 .gradient-text {
   color: black;
   background: linear-gradient(to left, var(--blue), var(--turquoise), var(--lime));
@@ -40,15 +45,34 @@ footer {
 
 .logo {
   height: 50px;
+  float: left;
 }
 
 .logo-container {
+  margin-top: 2rem;
+  width: 40vw;
+  display: grid;
+  grid-template-columns: [viewport-start] minmax(1em, 1fr) [container-start] minmax(0, 42em) [container-end] minmax(1em, 1fr) [viewport-end];
+}
+
+.title {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 20px 0 0 70px;
+  margin: 10px;
+
+  h1 {
+    margin-left: 10px;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.input-container {
+  margin-left: 10px;
 }
 
 .input-link {
