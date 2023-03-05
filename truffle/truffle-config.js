@@ -106,7 +106,11 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    
+    neondev: {
+      provider: () => new HDWalletProvider(MNEMONIC, `https://devnet.neonevm.org`),
+      network_id: "*"
+    },
+
     //
     // An additional network, but with some advanced options…
     // advanced: {
