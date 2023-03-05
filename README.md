@@ -26,13 +26,16 @@ BuidlBox submission:
 Demo Gif: 
 [![EventBlock.io in Action](https://i.imgur.com/6RvKcua.gif)](https://i.imgur.com/6RvKcua.gif)
 
+See the contract update on chain from the GIF demo above here:
 - [https://explorer.testnet.aurora.dev/tx/0xd72f0163a6d63d7024498e11482476770b0fb8e23dec02dcbf95029b53e4e7ee](https://explorer.testnet.aurora.dev/tx/0xd72f0163a6d63d7024498e11482476770b0fb8e23dec02dcbf95029b53e4e7ee)
  
 Youtube link:
 
 [![EventBlock.io ETHDenver 2023 Pitch](https://img.youtube.com/vi/J-scP5i8CUM/0.jpg)](https://www.youtube.com/watch?v=J-scP5i8CUM)
 
-View the contracts on chain here: https://explorer.testnet.aurora.dev/address/0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93/contracts#address-tabs
+View the contracts verified on chain here: https://explorer.testnet.aurora.dev/address/0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93/contracts#address-tabs
+
+View onchain transactions of deployment and update txs: https://explorer.testnet.aurora.dev/address/0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93/transactions#address-tabs 
 
 More info can be viewed here: https://www.notion.so/EventBlock-6a54739789f6489685f0e03f5e533ca9
 
