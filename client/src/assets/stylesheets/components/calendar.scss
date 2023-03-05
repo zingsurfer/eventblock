@@ -5,7 +5,7 @@ body {
   align-items: center;
   justify-content: center;
   padding-bottom: 30px;
-  background-color: #373c4f;
+  background-color: var(--dark-background);
   // color: rgb(0,231,139);
 }
 
@@ -269,22 +269,6 @@ body {
     margin-bottom: 2rem;
   }
 
-  .right .today-date .event-date {
-    font-size: 2rem;
-    font-weight: 500;
-  }
-
-  .event-title {
-    padding-top: 1rem;
-  }
-
-  .right .today-date .event-description {
-    font-size: 1rem;
-    font-weight: 400;
-    color: #878895;
-    margin: 1rem 0px;
-  }
-
   .events {
     width: 40vw;
     display: grid;
@@ -316,12 +300,6 @@ body {
     display: flex;
     align-items: center;
     pointer-events: none;
-  }
-
-  .events .event .title .event-date {
-    font-size: 1rem;
-    font-weight: 400;
-    margin-left: 20px;
   }
 
   .events .event i {
@@ -365,41 +343,6 @@ body {
     display: flex;
   }
 
-  .add-event {
-    position: absolute;
-    bottom: 30px;
-    right: 30px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    color: var(--lime);
-    border: 2px solid var(--lime);
-    opacity: 0.5;
-    border-radius: 50%;
-    background-color: transparent;
-    cursor: pointer;
-    font-size: 4rem;
-    font-weight: 400;
-    text-align: center;
-
-    span {
-      position: relative;
-      bottom: 3px;
-    }
-  }
-
-  .add-event:hover {
-    opacity: 0.42;
-    color: black;
-  }
-
-  .add-event i {
-    pointer-events: none;
-  }
-
   .events .no-event {
     width: 100%;
     height: 100%;
@@ -435,7 +378,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    color: #373c4f;
+    color: var(--dark-background);
     border-bottom: 1px solid #f5f5f5;
   }
 
@@ -480,7 +423,7 @@ body {
     padding: 0 10px;
     font-size: 1rem;
     font-weight: 400;
-    color: #373c4f;
+    color: var(--dark-background);
   }
 
   .add-event-body .add-event-input input::placeholder {
@@ -609,3 +552,33 @@ body {
   }
 }
 
+.event-date {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: #f0fdfa;
+}
+
+.event-btn {
+  color: #f0fdfa;
+  border: 1px solid #f0fdfa;
+  font-weight: 700;
+
+  &:hover {
+    color: var(--dark-background);
+    background-color: #f0fdfa;
+  }
+}
+
+.event-title {
+  color: #f0fdfa;
+}
+
+.event-description {
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  color: #9CA3AF;
+  margin: 1rem 0px;
+}

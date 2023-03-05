@@ -161,17 +161,27 @@ function Calendar() {
             </div>
           </div>
           <div className="events" style={{height: "100vh"}}>
-            {
-              events().map((evt) => {
-                return (
-                  <div className="today-date" key={`event-${evt.id}`}>
-                    <div className="event-date">{weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}</div>
-                    <h3 className="event-title">{evt.title}</h3>
-                    <div className="event-description">{evt.description}</div>
-                  </div>
-                )
-              })
-            }
+            <div className="today-date">
+              <div className="event-date">
+                <h2>
+                  {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
+                </h2>
+                <button className="event-btn">Add Event</button>
+              </div>
+              {
+                events().map((evt) => {
+                  return (
+                    <div style={{display:"flex", flexDirection:"row", paddingTop:"1.5rem"}}>
+                      <span style={{ marginRight: "1rem" }}>⬜️</span>
+                      <div key={`event-${evt.id}`}>
+                        <h3 className="event-title">{evt.title}</h3>
+                        <div className="event-description">{evt.description}</div>
+                      </div>
+                    </div>
+                    )
+                  })
+                }
+            </div>
           </div>
           <div className="add-event-wrapper">
             <div className="add-event-header">
@@ -202,9 +212,6 @@ function Calendar() {
             </div>
           </div>
         </div>
-        <button className="add-event">
-          <span>+</span>
-        </button>
       </div>
     </>
   );

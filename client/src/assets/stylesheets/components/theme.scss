@@ -1,11 +1,6 @@
 button:hover {
-  /* Gradient background */
-  background-image: linear-gradient(to right, var(--lime) 0%, var(--turquoise) 50%, var(--blue) 100%);
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 200% auto;
-  color:white
+  background-color: var(--primary-theme);
+  color: white;
 }
 
 button {
@@ -15,6 +10,7 @@ button {
   background-color: transparent;
   cursor: pointer;
   color: var(--primary-theme);
+  font-weight: 700;
 }
 
 footer {
