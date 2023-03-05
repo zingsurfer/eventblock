@@ -140,3 +140,7 @@ Infura, Truffle, and Ganache were very easy to work with. This combo enabled us 
 -  Deploy a Dapp on an L2 using Infura and Truffle
 
 -  Use the Truffle React Box to deploy a dapp on Infura
+
+- Polygon
+-- deployed to testnet
+-- https://mumbai.polygonscan.com/tx/0x80ecbbfacdaec2c8ce8c6728384a35e0485ca3f02346b7e1e8f29bbc12817638 
