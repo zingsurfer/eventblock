@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import Days from "./Days";
 import useEth from "../../contexts/EthContext/useEth";
 import Demo from "./Demo";
 
@@ -7,13 +6,14 @@ function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direct
 
 function Calendar() {
   const { state: { contract, accounts } } = useEth();
+  const today = new Date()
 
   const [title, setTitle] = useState("EventBlock");
   const [titleInput, setTitleInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isAddingEvent, setIsAddingEvent] = useState(false);
 
-  const [selectedDay, setSelectedDay] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState(today);
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const spanEle = useRef(null);
@@ -52,17 +52,10 @@ function Calendar() {
   }
 
   const allEvents = Demo();
-  allEvents.forEach(evt => {
-    console.log(`event: ${JSON.stringify(evt)}`)
-    // const e = JSON.parse(evt)
-    console.log(evt.title)
-  })
 
   const events = () => {
     let selectedEvents = []
     allEvents.forEach(evt => {
-      // const e = JSON.parse(evt)
-      console.log(evt.title)
       const startDate = new Date(evt.startTime * 1000)
 
       if (startDate >= firstDay() && startDate <= lastDay()) {
@@ -73,8 +66,8 @@ function Calendar() {
     return selectedEvents
   }
 
-  console.log(`lastday: ${lastDay()}`)
-  console.log(`firstday: ${firstDay()}`)
+  // console.log(`lastday: ${lastDay()}`)
+  // console.log(`firstday: ${firstDay()}`)
 
   const handleInputChange = e => {
     if (/^[a-zA-Z ]*$/.test(e.target.value)) {
@@ -107,6 +100,71 @@ function Calendar() {
     setIsAddingEvent(!(isAddingEvent));
   }
 
+  const [selectedDayIndex, setSelectedDayIndex] = useState(null);
+
+  const activeDayEle = useRef("");
+
+  let firstDayOfMonth = new Date(selectedDay.getFullYear(), selectedDay.getMonth(), 1);
+  let weekdayOfFirstDay = firstDayOfMonth.getDay();
+
+  const updateActiveDay = (day) => {
+    const prevDayNumber = selectedDay.getDate()
+
+    console.log(`previous: ${selectedDay}`)
+    console.log(today.getDate())
+
+    const diff = day.number - prevDayNumber
+
+    console.log(`new ${day.number} - prev ${prevDayNumber} = ${diff}`)
+
+    selectedDay.setDate(selectedDay.getDate() + diff)
+
+    console.log(`new selectedDay: ${selectedDay}`)
+  }
+
+  const isSameDay = (day) => {
+    const today = new Date()
+    return day.getFullYear() === today.getFullYear() &&
+      day.getMonth() === today.getMonth() &&
+      day.getDate() === today.getDate();
+  }
+
+  const dayClasses = (day, index) => {
+    return "day" +
+      (day.currentMonth ? " selected-month" : "") +
+      (day.firstSelection || selectedDayIndex === index ? " active" : "") +
+      (isSameDay(new Date(day.year, day.month, day.number)) ? " today" : "")
+  }
+
+  const selectedDays = () => {
+    let selectedDays = [];
+
+    for (let day = 0; day < 42; day++) {
+      if (day === 0 && weekdayOfFirstDay === 0) {
+        firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 7);
+      } else if (day === 0) {
+        firstDayOfMonth.setDate(firstDayOfMonth.getDate() + (day - weekdayOfFirstDay));
+      } else {
+        firstDayOfMonth.setDate(firstDayOfMonth.getDate() + 1);
+      }
+
+
+      let calendarDay = {
+        key: `day-${day}`,
+        currentMonth: (firstDayOfMonth.getMonth() === selectedDay.getMonth()),
+        date: (new Date(firstDayOfMonth)),
+        month: firstDayOfMonth.getMonth(),
+        number: firstDayOfMonth.getDate(),
+        firstSelection: (firstDayOfMonth.toDateString() === selectedDay.toDateString()),
+        year: firstDayOfMonth.getFullYear()
+      }
+
+      selectedDays.push(calendarDay);
+    }
+    return selectedDays;
+  }
+
+
   return (
     <>
       <div id="cal" className="container">
@@ -124,7 +182,18 @@ function Calendar() {
                 })
               }
             </div>
-            <Days />
+            <div className="days">
+              {
+                selectedDays().map((day, i) => {
+                  return (
+                    <div className={dayClasses(day, i)} key={day.key}
+                      onClick={() => updateActiveDay(day)}>
+                      <p>{day.number}</p>
+                    </div>
+                  )
+                })
+              }
+            </div>
             <div className="goto-today">
               <button className="today-btn">Today</button>
               <div className="goto">
@@ -167,7 +236,6 @@ function Calendar() {
           </div>
           <div className="events" style={{height: "100vh"}}>
             {
-              // true ?
               isAddingEvent ?
               <div className="today-date">
                 <div className="event-date">
@@ -206,9 +274,9 @@ function Calendar() {
                     const eventTitle = evt.title.substring(0, 37)
                     const eventDescription = evt.title.substring(37)
                     return (
-                      <div style={{display:"flex", flexDirection:"row", paddingTop:"1.5rem"}}>
+                      <div style={{ display: "flex", flexDirection: "row", paddingTop: "1.5rem" }} key={`event-${evt.id}`}>
                         <span style={{ marginRight: "1rem" }}>⬜️</span>
-                        <div key={`event-${evt.id}`}>
+                        <div>
                           <h3 className="event-title">{eventTitle} . . .</h3>
                           <div className="event-description">...{eventDescription}</div>
                         </div>
