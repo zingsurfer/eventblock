@@ -10,13 +10,20 @@ function Calendar() {
 
   const [title, setTitle] = useState("EventBlock");
   const [titleInput, setTitleInput] = useState("");
+  const [eventInput, setEventInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isAddingEvent, setIsAddingEvent] = useState(false);
+  const [reloadEvents, setReloadEvents] = useState(false);
 
   const [selectedDay, setSelectedDay] = useState(today);
+  const [dayEvents, setDayEvents] = useState([{ title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non bibendum tortor. "}]);
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const spanEle = useRef(null);
+
+  useEffect(() => {
+    setReloadEvents(false)
+  }, [reloadEvents]);
 
   useEffect(() => {
     setIsEditingTitle(false)
@@ -51,6 +58,7 @@ function Calendar() {
     return day
   }
 
+
   const allEvents = Demo();
 
   const events = () => {
@@ -66,12 +74,51 @@ function Calendar() {
     return selectedEvents
   }
 
-  // console.log(`lastday: ${lastDay()}`)
-  // console.log(`firstday: ${firstDay()}`)
+  const dayEventsIndex = () => {
+    let de = {}
+    events().forEach(evt => {
+      const startDate = new Date(evt.startTime * 1000)
+      de[startDate.getDate()] = de[startDate.getDate()] || []
+      de[startDate.getDate()].push(evt)
+    })
+
+    console.log(de)
+
+    return de
+  }
+
+  const createEvent = async(e) => {
+    if (e.target.tagName === "INPUT") {
+      return;
+    }
+    if (eventInput === "") {
+      alert("Please enter a event");
+      return;
+    }
+
+    const prevEvents = dayEvents
+    const clone = [...prevEvents]
+    clone.push({ title: eventInput })
+    setDayEvents(clone)
+
+    setIsAddingEvent(false)
+    console.log(dayEvents)
+    await contract.methods.updateTitle(titleInput).send({ from: accounts[0] });
+  }
+
+  const findDayEvents = () => {
+    const de = dayEventsIndex()
+    return de[selectedDay.getDate()] || []
+  }
 
   const handleInputChange = e => {
     if (/^[a-zA-Z ]*$/.test(e.target.value)) {
       setTitleInput(e.target.value);
+    }
+  };
+  const handleEventChange = e => {
+    if (/^[a-zA-Z ]*$/.test(e.target.value)) {
+      setEventInput(e.target.value);
     }
   };
 
@@ -120,7 +167,18 @@ function Calendar() {
     selectedDay.setDate(selectedDay.getDate() + diff)
 
     console.log(`new selectedDay: ${selectedDay}`)
+
+    if (findDayEvents()[0]) {
+
+      console.log(dayEvents()[0].title)
+    }
+    setReloadEvents(true)
+    const demoEvents = Demo();
+    const shuffled = demoEvents.sort(() => 0.5 - Math.random());
+    let selectedDemoEvents = shuffled.slice(0, Math.floor(Math.random() * 5));
+    setDayEvents(selectedDemoEvents)
   }
+
 
   const isSameDay = (day) => {
     const today = new Date()
@@ -245,7 +303,7 @@ function Calendar() {
                       </span>
                   </h2>
                   <div>
-                    <button className="event-btn--create button-space" onClick={toggleNewEventForm}>Submit</button>
+                    <button className="event-btn--create button-space" onClick={createEvent}>Submit</button>
                     <button className="event-btn--cancel" onClick={toggleNewEventForm}>Cancel</button>
                   </div>
                 </div>
@@ -255,8 +313,8 @@ function Calendar() {
                     <input
                       type="text"
                       placeholder=""
-                      value={titleInput}
-                      onChange={handleInputChange}
+                      value={eventInput}
+                      onChange={handleEventChange}
                       style={{background:"transparent"}}
                     />
                   </div>
@@ -270,7 +328,7 @@ function Calendar() {
                   <button className="event-btn--new" onClick={toggleNewEventForm}>Add Event</button>
                 </div>
                 {
-                  events().map((evt) => {
+                  dayEvents.map((evt) => {
                     const eventTitle = evt.title.substring(0, 37)
                     const eventDescription = evt.title.substring(37)
                     return (
@@ -286,34 +344,6 @@ function Calendar() {
                   }
                 </div>
             }
-          </div>
-          <div className="add-event-wrapper">
-            <div className="add-event-header">
-              <div className="title">Add Event</div>
-              <i className="fas fa-times close"></i>
-            </div>
-            <div className="add-event-body">
-              <div className="add-event-input">
-                <input type="text" placeholder="Event Name" className="event-name" />
-              </div>
-              <div className="add-event-input">
-                <input
-                  type="text"
-                  placeholder="Event Time From"
-                  className="event-time-from"
-                />
-              </div>
-              <div className="add-event-input">
-                <input
-                  type="text"
-                  placeholder="Event Time To"
-                  className="event-time-to"
-                />
-              </div>
-            </div>
-            <div className="add-event-footer">
-              <button className="add-event-btn">Add Event</button>
-            </div>
           </div>
         </div>
       </div>
