@@ -9,6 +9,8 @@
     •
     <a href="#tech">Tech</a>
     •
+    <a href="#production">Production</a>
+    •
     <a href="#development">Development</a>
   </p>
 
@@ -16,9 +18,9 @@
 <br/>
 
 # About
-[EventBlock.io](https://EventBlock.io/) is a decentralized calendar dApp with editable events stored on-chain. It is built with custom solidity and Open Zeplin authentication, deployed on Near via Aurora bridge, works with MetaMask, and has a front-end in React deployed on [Netlify](https://www.netlify.com/). EventBlock can be used by DAOs to mint a calendar for community events, track governance, and follow NFT mints. The team is applying for various bounties, including deploying a dApp on an L2 using Infura and Truffle, and deploying a decentralized frontend component for any Ethereum project or hack on Aurora. 
+[EventBlock.io](https://EventBlock.io/) is a decentralized calendar dApp with editable events stored on-chain. It is built with custom solidity and Open Zeppelin authentication, deployed on Near via Aurora bridge, works with MetaMask, and has a frontend in React deployed on [Netlify](https://www.netlify.com/). EventBlock can be used by DAOs to mint a calendar for community events, track governance, and follow NFT mints. The team is applying for various bounties, including deploying a dApp on an L2 using Infura and Truffle, and deploying a decentralized frontend component for any Ethereum project or hack on Aurora.
 
-BudilBox submission:
+BuidlBox submission:
 - [https://app.buidlbox.io/projects/eventblock](https://app.buidlbox.io/projects/eventblock)
 
 # Tech
@@ -33,15 +35,29 @@ EventBlock was built with:
 - [Webpack](https://webpack.js.org)
 
 # Production
-This project is deployed on [Netlify](https://www.netlify.com/) with contiunus integration support via Github. 
+This project is deployed on [Netlify](https://www.netlify.com/) with contiunuos integration support via GitHub.
 
-Build arguments in the Netlify deploy:
-```sh
-build && XYZ
-```
-Set enviorment varriables in the Netlify Build:
+Set environment variables in the Netlify Build:
 ```sh
 INFURA_KEY=
+MNEMONIC=
+```
+Netlify build settings:
+- Runtime: Not set
+- Base directory: Not set
+- Build command: cd truffle && yarn install && cd ../client && echo "REACT_APP_CONTRACT_ENV=production" >> .env && yarn install && yarn build
+- Publish directory: client/build
+
+Explanation of the build command:
+```sh
+# Install truffle dependencies
+cd truffle && yarn install &&
+  # Move to client directory
+  cd ../client &&
+  # Manually add an env var (this particular one didn't show up without this)
+  echo "REACT_APP_CONTRACT_ENV=production" >> .env &&
+  # Install client dependencies and build
+  yarn install && yarn build
 ```
 
 # Development
@@ -96,10 +112,9 @@ Run `make start_client`.
 ## Testing
 Run `make test`.
 
-
 # Challenges faced
-Truffle and Ganeche were very easy to work with. Our challenges arose when we trying to deploy to Netlify and adjusting the process from localhost. 
-As a team new to solidty, getting our cotract verified onchain for the OpenZeplin Defender bounty was far more challenging than expected. Better docs on verifying a Solidity contract would be greatly appreciated. We were able to get it working, eventually https://defender.openzeppelin.com/#/admin/contracts/auroratest-0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93 
+Infura, Truffle, and Ganache were very easy to work with. This combo enabled us to get up and running quickly locally, even with no prior experience of working on Solidity. The docs were an excellent resource, and overall we had a great experience with them. Our challenges arose when we were trying to adapt from what we had working locally to deploy to Netlify. As a team new to solidity, getting our contract verified onchain for the OpenZeppelin Defender bounty took some digging to figure out. Deploying also took far more effort than we expected. More docs on deploying and verifying a Solidity contract would be greatly appreciated. We were able to get it working, eventually https://defender.openzeppelin.com/#/admin/contracts/auroratest-0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93
+
 # Bounties
 -  OpenZeppelin Defender Integration
 [https://docs.openzeppelin.com/defender/](https://docs.openzeppelin.com/defender/)
@@ -108,4 +123,4 @@ As a team new to solidty, getting our cotract verified onchain for the OpenZepli
 
 -  Deploy a Dapp on an L2 using Infura and Truffle
 
--  Use the Truffle React Box to deploy a dapp on Infura  
+-  Use the Truffle React Box to deploy a dapp on Infura
