@@ -27,6 +27,12 @@ Youtube link:
 
 [![EventBlock.io ETHDenver 2023 Pitch](https://img.youtube.com/vi/J-scP5i8CUM/0.jpg)](https://www.youtube.com/watch?v=J-scP5i8CUM)
 
+View the contracts on chain here: https://explorer.testnet.aurora.dev/address/0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93/contracts#address-tabs
+
+More info can be viewed here: https://www.notion.so/EventBlock-6a54739789f6489685f0e03f5e533ca9
+
+OpenZeplin Defender: https://defender.openzeppelin.com/#/admin/contracts/auroratest-0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93
+
 
 # Tech
 EventBlock was built with:
