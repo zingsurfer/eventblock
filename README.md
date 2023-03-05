@@ -99,7 +99,7 @@ Run `make test`.
 
 # Challenges faced
 Truffle and Ganeche were very easy to work with. Our challenges arose when we trying to deploy to Netlify and adjusting the process from localhost. 
-
+As a team new to solidty, getting our cotract verified onchain for the OpenZeplin Defender bounty was far more challenging than expected. Better docs on verifying a Solidity contract would be greatly appreciated. We were able to get it working, eventually https://defender.openzeppelin.com/#/admin/contracts/auroratest-0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93 
 # Bounties
 -  OpenZeppelin Defender Integration
 [https://docs.openzeppelin.com/defender/](https://docs.openzeppelin.com/defender/)
