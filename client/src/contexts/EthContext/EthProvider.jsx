@@ -31,8 +31,8 @@ function EthProvider({ children }) {
   useEffect(() => {
     const tryInit = async () => {
       try {
-        const env = process.env.NODE_ENV
-        console.log(env)
+        const env = process.env.REACT_APP_CONTRACT_ENV
+        console.log(`CONTRACT_ENV=${env}`)
 
         const artifact = (env === "production") ?
           require("../../verifiedContracts/Calendar.json") :
