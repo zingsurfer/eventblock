@@ -131,7 +131,7 @@ function Calendar() {
         </div>
         <div className="right">
           <div className="logo-container">
-            <div style={{"grid-column": "container"}}>
+            <div style={{"gridColumn": "container"}}>
               <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
               <div className={`btns title-input-buttons ${isEditingTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
                 <div className="submit-container">
