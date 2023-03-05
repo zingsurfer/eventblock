@@ -9,6 +9,8 @@
     •
     <a href="#tech">Tech</a>
     •
+    <a href="#production">Production</a>
+    •
     <a href="#development">Development</a>
   </p>
 
@@ -16,7 +18,10 @@
 <br/>
 
 # About
-🚧🔨 Coming soon
+[EventBlock.io](https://EventBlock.io/) is a decentralized calendar dApp with editable events stored on-chain. It is built with custom solidity and Open Zeppelin authentication, deployed on Near via Aurora bridge, works with MetaMask, and has a frontend in React deployed on [Netlify](https://www.netlify.com/). EventBlock can be used by DAOs to mint a calendar for community events, track governance, and follow NFT mints. The team is applying for various bounties, including deploying a dApp on an L2 using Infura and Truffle, and deploying a decentralized frontend component for any Ethereum project or hack on Aurora.
+
+BuidlBox submission:
+- [https://app.buidlbox.io/projects/eventblock](https://app.buidlbox.io/projects/eventblock)
 
 # Tech
 EventBlock was built with:
@@ -28,6 +33,32 @@ EventBlock was built with:
 - [Solidity](https://soliditylang.org/)
 - [Truffle](https://trufflesuite.com)
 - [Webpack](https://webpack.js.org)
+
+# Production
+This project is deployed on [Netlify](https://www.netlify.com/) with contiunuos integration support via GitHub.
+
+Set environment variables in the Netlify Build:
+```sh
+INFURA_KEY=
+MNEMONIC=
+```
+Netlify build settings:
+- Runtime: Not set
+- Base directory: Not set
+- Build command: cd truffle && yarn install && cd ../client && echo "REACT_APP_CONTRACT_ENV=production" >> .env && yarn install && yarn build
+- Publish directory: client/build
+
+Explanation of the build command:
+```sh
+# Install truffle dependencies
+cd truffle && yarn install &&
+  # Move to client directory
+  cd ../client &&
+  # Manually add an env var (this particular one didn't show up without this)
+  echo "REACT_APP_CONTRACT_ENV=production" >> .env &&
+  # Install client dependencies and build
+  yarn install && yarn build
+```
 
 # Development
 This project includes a Makefile. Run `make` to list all available commands.
@@ -80,3 +111,16 @@ Run `make start_client`.
 
 ## Testing
 Run `make test`.
+
+# Challenges faced
+Infura, Truffle, and Ganache were very easy to work with. This combo enabled us to get up and running quickly locally, even with no prior experience of working on Solidity. The docs were an excellent resource, and overall we had a great experience with them. Our challenges arose when we were trying to adapt from what we had working locally to deploy to Netlify. As a team new to solidity, getting our contract verified onchain for the OpenZeppelin Defender bounty took some digging to figure out. Deploying also took far more effort than we expected. More docs on deploying and verifying a Solidity contract would be greatly appreciated. We were able to get it working, eventually https://defender.openzeppelin.com/#/admin/contracts/auroratest-0xAeb9b07A09EC3c7c604418eC3f6b0CfdA42e0E93
+
+# Bounties
+-  OpenZeppelin Defender Integration
+[https://docs.openzeppelin.com/defender/](https://docs.openzeppelin.com/defender/)
+
+-  Open Aurora Bounty
+
+-  Deploy a Dapp on an L2 using Infura and Truffle
+
+-  Use the Truffle React Box to deploy a dapp on Infura
