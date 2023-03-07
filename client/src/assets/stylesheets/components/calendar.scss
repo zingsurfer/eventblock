@@ -260,7 +260,6 @@ body {
     position: relative;
     width: 40%;
     min-height: 100%;
-    padding: 20px 0;
   }
 
   .right .today-date {
@@ -478,18 +477,6 @@ body {
       border-radius: 0;
     }
 
-    .container .left {
-      width: 60%;
-      height: 100%;
-      padding: 20px 0;
-    }
-
-    .container .right {
-      width: 100%;
-      height: 100%;
-      padding: 20px 0;
-    }
-
     .calendar::before,
     .calendar::after {
       top: 100%;
@@ -521,6 +508,10 @@ body {
     .left {
         width: 500px;
       }
+
+    .mobile-br {
+      display: block;
+    }
   }
   @media screen and (max-width: 500px) {
 
@@ -605,4 +596,12 @@ body {
   font-weight: 400;
   color: #9CA3AF;
   margin: 1rem 0px;
+}
+
+.right {
+  padding: 1rem 2rem;
+}
+
+.mobile-br {
+  display: none;
 }

@@ -1,14 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import useEth from "../../contexts/EthContext/useEth";
 import Demo from "./Demo";
+import EthContext from "../../contexts/EthContext/EthContext";
 
 function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direction}`}></i> }
 
 function Calendar() {
+  const eth = useContext(EthContext);
   const { state: { contract, accounts } } = useEth();
   const today = new Date()
 
-  const [title, setTitle] = useState("EventBlock");
+  const [calendarTitle, setCalendarTitle] = useState("CoolCalendarName");
   const [titleInput, setTitleInput] = useState("");
   const [eventInput, setEventInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
@@ -24,10 +26,6 @@ function Calendar() {
   useEffect(() => {
     setReloadEvents(false)
   }, [reloadEvents]);
-
-  useEffect(() => {
-    setIsEditingTitle(false)
-  }, [title]);
 
   function showTitleInput() {
     setIsEditingTitle(true)
@@ -122,11 +120,6 @@ function Calendar() {
     }
   };
 
-  const read = async () => {
-    const value = await contract.methods.title().call({ from: accounts[0] });
-    console.log(`read: ${value}`);
-  };
-
   const updateTitle = async e => {
     if (e.target.tagName === "INPUT") {
       return;
@@ -135,7 +128,6 @@ function Calendar() {
       alert("Please enter a title");
       return;
     }
-    setTitle(titleInput);
     await contract.methods.updateTitle(titleInput).send({ from: accounts[0] });
   };
 
@@ -222,6 +214,16 @@ function Calendar() {
     return selectedDays;
   }
 
+  useEffect(() => {
+    if (contract != null) {
+      getCalendarTitle()
+    }
+  }, [eth.state.contract]);
+
+  const getCalendarTitle = async () => {
+    const value = await contract.methods.title().call({ from: accounts[0] });
+    setCalendarTitle(value);
+  };
 
   return (
     <>
@@ -262,8 +264,8 @@ function Calendar() {
           </div>
         </div>
         <div className="right">
-          <div className="logo-container">
-            <div style={{"gridColumn": "container"}}>
+          <div className="calendar-title-grid">
+            <div className="calendar-title-grid-col">
               <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
               <div className={`btns title-input-buttons ${isEditingTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
                 <div className="submit-container">
@@ -286,8 +288,9 @@ function Calendar() {
                   </div>
                 </div>
               </div>
-              <div className={`calendar-title ${isEditingTitle ? "hidden" : "title" }`}>
-                <h1 className="date"><span className="gradient-text" ref={spanEle}>{title}</span></h1>
+              <div className={`calendar-title ${isEditingTitle ? "hidden" : "title"}`}>
+                <h1><span className="gradient-text" ref={spanEle}>EventBlock</span></h1>
+                <h1>{calendarTitle}</h1>
                 <button className="input-link" onClick={showTitleInput} ><span className="underline">edit</span></button>
               </div>
             </div>
@@ -298,7 +301,8 @@ function Calendar() {
               <div className="today-date">
                 <div className="event-date">
                   <h2>
-                      New event <span style={{ fontWeight: 400}}>
+                      New event <br className="mobile-br"/>
+                      <span style={{ fontWeight: 400}}>
                         on {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
                       </span>
                   </h2>
