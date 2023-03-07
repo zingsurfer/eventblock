@@ -17,7 +17,7 @@ function Calendar() {
 
   const [eventInput, setEventInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isAddingEvent, setIsAddingEvent] = useState(false);
+  const [isAddingEvent, setIsAddingEvent] = useState(true);
   const [isDemo, setIsDemo] = useState(false);
 
   const [selectedDay, setSelectedDay] = useState(today);
@@ -323,7 +323,7 @@ function Calendar() {
                 </div>
                 <div className="submit-container event-form">
                   <div className="event-form--title">
-                    <label className="event-form--label">Title:</label>
+                    <label className="event-form--label">Title</label>
                     <input
                       type="text"
                       placeholder=""

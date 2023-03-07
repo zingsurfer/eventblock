@@ -54,5 +54,12 @@
 }
 
 .event-form--label {
-  font-size: 16px;
+  font-size: 14px;
+  position: relative;
+  bottom: -14px;
+  left: 15px;
+  background: var(--dark-background);
+  padding: 5px;
+  color: var(--primary-theme);
+  font-weight: 700;
 }
