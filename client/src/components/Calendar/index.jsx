@@ -333,20 +333,20 @@ function Calendar() {
                   </div>
                 </div>
                 <div className="input-row event-form">
-                  <div className="text-field">
-                    <label>Title</label>
+                  <div className="time-field">
+                    <label>From</label>
                     <input
                       type="text"
-                      placeholder=""
+                      placeholder="HH:MM AM/PM"
                       value={eventInput}
                       onChange={handleEventChange}
                     />
                   </div>
-                  <div className="text-field">
-                    <label>Title</label>
+                  <div className="time-field">
+                    <label>To</label>
                     <input
                       type="text"
-                      placeholder=""
+                      placeholder="HH:MM AM/PM"
                       value={eventInput}
                       onChange={handleEventChange}
                     />
