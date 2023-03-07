@@ -8,24 +8,27 @@ function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direct
 function Calendar() {
   const eth = useContext(EthContext);
   const { state: { contract, accounts } } = useEth();
-  const today = new Date()
+  const today = new Date();
 
   const [calendarTitle, setCalendarTitle] = useState("CoolCalendarName");
   const [titleInput, setTitleInput] = useState("");
+
+  const [allEvents, setAllEvents] = useState([]);
+
   const [eventInput, setEventInput] = useState("");
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [isAddingEvent, setIsAddingEvent] = useState(false);
-  const [reloadEvents, setReloadEvents] = useState(false);
+  const [isDemo, setIsDemo] = useState(false);
 
   const [selectedDay, setSelectedDay] = useState(today);
-  const [dayEvents, setDayEvents] = useState([{ title:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce non bibendum tortor. "}]);
-  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+  const [dayEvents, setDayEvents] = useState([]);
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const spanEle = useRef(null);
 
   useEffect(() => {
-    setReloadEvents(false)
-  }, [reloadEvents]);
+    setIsEditingTitle(false)
+  }, [calendarTitle]);
 
   function showTitleInput() {
     setIsEditingTitle(true)
@@ -56,9 +59,6 @@ function Calendar() {
     return day
   }
 
-
-  const allEvents = Demo();
-
   const events = () => {
     let selectedEvents = []
     allEvents.forEach(evt => {
@@ -85,7 +85,7 @@ function Calendar() {
     return de
   }
 
-  const createEvent = async(e) => {
+  const addEvent = async(e) => {
     if (e.target.tagName === "INPUT") {
       return;
     }
@@ -96,12 +96,14 @@ function Calendar() {
 
     const prevEvents = dayEvents
     const clone = [...prevEvents]
-    clone.push({ title: eventInput })
+    clone.push({ id: prevEvents.length, title: eventInput })
     setDayEvents(clone)
-
     setIsAddingEvent(false)
-    console.log(dayEvents)
-    await contract.methods.updateTitle(titleInput).send({ from: accounts[0] });
+
+    const startTime = Math.round(selectedDay.getTime() / 1000);
+    const endTime = Math.round(selectedDay.getTime() / 1000) + 3600;
+
+    await contract.methods.addEvent(eventInput, startTime, endTime, selectedDay.getFullYear(), selectedDay.getMonth()).send({ from: accounts[0] });
   }
 
   const findDayEvents = () => {
@@ -128,6 +130,7 @@ function Calendar() {
       alert("Please enter a title");
       return;
     }
+    setCalendarTitle(titleInput);
     await contract.methods.updateTitle(titleInput).send({ from: accounts[0] });
   };
 
@@ -150,8 +153,6 @@ function Calendar() {
     const prevDayNumber = selectedDay.getDate()
 
     console.log(`previous: ${selectedDay}`)
-    console.log(today.getDate())
-
     const diff = day.number - prevDayNumber
 
     console.log(`new ${day.number} - prev ${prevDayNumber} = ${diff}`)
@@ -160,15 +161,14 @@ function Calendar() {
 
     console.log(`new selectedDay: ${selectedDay}`)
 
-    if (findDayEvents()[0]) {
-
-      console.log(dayEvents()[0].title)
+    if (isDemo) {
+      const demoEvents = Demo();
+      const shuffled = demoEvents.sort(() => 0.5 - Math.random());
+      let selectedDemoEvents = shuffled.slice(0, Math.floor(Math.random() * 5));
+      setDayEvents(selectedDemoEvents)
+    } else {
+      setDayEvents(findDayEvents())
     }
-    setReloadEvents(true)
-    const demoEvents = Demo();
-    const shuffled = demoEvents.sort(() => 0.5 - Math.random());
-    let selectedDemoEvents = shuffled.slice(0, Math.floor(Math.random() * 5));
-    setDayEvents(selectedDemoEvents)
   }
 
 
@@ -217,12 +217,22 @@ function Calendar() {
   useEffect(() => {
     if (contract != null) {
       getCalendarTitle()
+      getEvents()
     }
   }, [eth.state.contract]);
 
   const getCalendarTitle = async () => {
-    const value = await contract.methods.title().call({ from: accounts[0] });
+    let value = await contract.methods.title().call({ from: accounts[0] });
+    if (value == "") {
+      value  = "CoolCalendarName"
+    }
     setCalendarTitle(value);
+  };
+
+  const getEvents = async () => {
+    const events = await contract.methods.getAllEvents().call({ from: accounts[0] });
+    console.log(`getEvents => ${events}`)
+    setAllEvents(events)
   };
 
   return (
@@ -307,7 +317,7 @@ function Calendar() {
                       </span>
                   </h2>
                   <div>
-                    <button className="event-btn--create button-space" onClick={createEvent}>Submit</button>
+                    <button className="event-btn--create button-space" onClick={addEvent}>Submit</button>
                     <button className="event-btn--cancel" onClick={toggleNewEventForm}>Cancel</button>
                   </div>
                 </div>
