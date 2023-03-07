@@ -278,7 +278,7 @@ function Calendar() {
             <div className="calendar-title-grid-col">
               <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
               <div className={`btns title-input-buttons ${isEditingTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
-                <div className="submit-container">
+                <div className="input-row">
                   <div className="input-container">
                     <input
                       type="text"
@@ -321,15 +321,34 @@ function Calendar() {
                     <button className="event-btn--cancel" onClick={toggleNewEventForm}>Cancel</button>
                   </div>
                 </div>
-                <div className="submit-container event-form">
-                  <div className="event-form--title">
-                    <label className="event-form--label">Title</label>
+                <div className="input-row event-form">
+                  <div className="text-field">
+                    <label>Title</label>
                     <input
                       type="text"
                       placeholder=""
                       value={eventInput}
                       onChange={handleEventChange}
-                      style={{background:"transparent"}}
+                    />
+                  </div>
+                </div>
+                <div className="input-row event-form">
+                  <div className="text-field">
+                    <label>Title</label>
+                    <input
+                      type="text"
+                      placeholder=""
+                      value={eventInput}
+                      onChange={handleEventChange}
+                    />
+                  </div>
+                  <div className="text-field">
+                    <label>Title</label>
+                    <input
+                      type="text"
+                      placeholder=""
+                      value={eventInput}
+                      onChange={handleEventChange}
                     />
                   </div>
                 </div>
