@@ -576,32 +576,20 @@ body {
   }
 }
 
-.event-btn--create {
+.event-btn .submit {
   color: #f0fdfa;
   border: 1px solid #f0fdfa;
   font-weight: 700;
-
-  &:hover {
-    color: var(--lime);
-    background-color: transparent;
-    border: 1px solid var(--lime);
-  }
 }
 
-.event-btn--cancel {
+.event-btn .cancel {
   color: #9CA3AF;
   border: 1px solid #9CA3AF;
   font-weight: 700;
-
-  &:hover {
-    color: red;
-    background-color: transparent;
-    border: 1px solid red;
-  }
 }
 
 .event-title {
-  color: #9CA3AF;
+  color: #f0fdfa;
 }
 
 .event-description {
@@ -618,4 +606,19 @@ body {
 
 .mobile-br {
   display: none;
+}
+
+.submit {
+  &:hover {
+    color: var(--lime);
+    background-color: transparent;
+    border: 1px solid var(--lime);
+  }
+}
+.cancel {
+  &:hover {
+    color: red;
+    background-color: transparent;
+    border: 1px solid red;
+  }
 }

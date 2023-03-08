@@ -16,7 +16,7 @@ function Toast() {
   return (
     <>
       {
-        alert ? <p className = "alert">{ alert }</p> : null
+        alert ? <p className = "alert"><strong>Alert:</strong>{ alert }</p> : null
       }
     </>
   );
