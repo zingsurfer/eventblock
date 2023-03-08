@@ -42,7 +42,7 @@
  */
 
 require('dotenv').config();
-const { MNEMONIC, INFURA_KEY } = process.env;
+const { MNEMONIC, INFURA_KEY, FTMSCAN_KEY } = process.env;
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 
@@ -169,6 +169,10 @@ module.exports = {
       // }
     }
   },
+  api_keys: {
+    ftmscan: FTMSCAN_KEY,
+  },
+  plugins: ['truffle-plugin-verify'],
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be
