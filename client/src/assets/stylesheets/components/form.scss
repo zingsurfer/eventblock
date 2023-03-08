@@ -29,6 +29,7 @@
 
   /* reset input */
   label {
+
     &:required,
     &:invalid {
       box-shadow: none;
@@ -36,23 +37,108 @@
   }
 }
 
+.input-row {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: flex-end;
+}
+
 .event-form {
   margin: 2rem 0;
 }
 
-.event-form--title {
+.text-field {
   width: 100%;
+
+  label {
+    font-size: 14px;
+    position: relative;
+    bottom: -14px;
+    left: 15px;
+    background: var(--dark-background);
+    padding: 5px;
+    color: var(--primary-theme);
+    font-weight: 700;
+  }
 
   input {
     color: #f0fdfa;
     width: 100%;
     border-radius: 3px;
     border: 1px solid #9CA3AF;
-    padding: 10px 7px 2px 7px;
+    padding: 10px 7px 5px 7px;
     margin-top: 0.5rem;
+    font-size: 2rem;
+    background: transparent;
   }
 }
 
-.event-form--label {
-  font-size: 16px;
+.time-field {
+  width: 100%;
+
+  label {
+    font-size: 14px;
+    position: relative;
+    bottom: -14px;
+    left: 15px;
+    background: var(--dark-background);
+    padding: 5px;
+    color: var(--primary-theme);
+    font-weight: 700;
+  }
+
+  input {
+    color: #f0fdfa;
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #9CA3AF;
+    padding: 10px 7px 5px 7px;
+    margin-top: 0.5rem;
+    font-size: 2rem;
+    background: transparent;
+  }
+
+  input::placeholder {
+    color: #9CA3AF;
+    font-size: 1.75rem;
+  }
+}
+
+.invalid-input {
+  input {
+    color: #fd5f00;
+  }
+
+  label {
+    color: #fd5f00;
+  }
+
+  input:focus {
+    border: 3px solid #fd5f00;
+  }
+
+  label::after {
+    content: ' ─ invalid format';
+    font-style: italic;
+  }
+}
+
+.invalid-range {
+  input {
+    color: red;
+  }
+
+  label {
+    color: red;
+  }
+
+  input:focus {
+    border: 3px solid red;
+  }
+
+  label::after {
+    content: ' ─ invalid range';
+    font-style: italic;
+  }
 }

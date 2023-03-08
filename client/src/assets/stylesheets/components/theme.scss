@@ -127,9 +127,8 @@ footer {
   float: left;
 }
 
-.logo-container {
+.calendar-title-grid {
   margin-top: 2rem;
-  width: 40vw;
   display: grid;
   grid-template-columns:
     [viewport-start] minmax(2em, 1fr)
@@ -138,12 +137,18 @@ footer {
     [viewport-end];
 }
 
+.calendar-title-grid-col {
+  grid-column: container;
+  align-items: center;
+  justify-content: flex-start;
+  display: flex;
+}
+
 .title {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  margin: 10px;
 
   h1 {
     margin-left: 10px;

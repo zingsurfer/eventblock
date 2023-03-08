@@ -13,6 +13,19 @@ body {
   margin-right: 1rem;
 }
 
+.time-range {
+  margin-bottom: 0.5rem;
+  color: #f0fdfa;
+}
+
+.block {
+  margin-right: 1rem;
+  margin-top: 4px;
+  height: 1rem;
+  width: 1rem;
+  background-color: #f0fdfa;
+}
+
 #cal {
   display: flex;
   min-height: 850px;
@@ -20,6 +33,7 @@ body {
   padding: 5px;
   color: #fff;
   display: flex;
+
 
   .left {
     width: 60%;
@@ -260,7 +274,6 @@ body {
     position: relative;
     width: 40%;
     min-height: 100%;
-    padding: 20px 0;
   }
 
   .right .today-date {
@@ -478,18 +491,6 @@ body {
       border-radius: 0;
     }
 
-    .container .left {
-      width: 60%;
-      height: 100%;
-      padding: 20px 0;
-    }
-
-    .container .right {
-      width: 100%;
-      height: 100%;
-      padding: 20px 0;
-    }
-
     .calendar::before,
     .calendar::after {
       top: 100%;
@@ -521,6 +522,10 @@ body {
     .left {
         width: 500px;
       }
+
+    .mobile-br {
+      display: block;
+    }
   }
   @media screen and (max-width: 500px) {
 
@@ -571,28 +576,16 @@ body {
   }
 }
 
-.event-btn--create {
+.event-btn .submit {
   color: #f0fdfa;
   border: 1px solid #f0fdfa;
   font-weight: 700;
-
-  &:hover {
-    color: var(--lime);
-    background-color: transparent;
-    border: 1px solid var(--lime);
-  }
 }
 
-.event-btn--cancel {
+.event-btn .cancel {
   color: #9CA3AF;
   border: 1px solid #9CA3AF;
   font-weight: 700;
-
-  &:hover {
-    color: red;
-    background-color: transparent;
-    border: 1px solid red;
-  }
 }
 
 .event-title {
@@ -605,4 +598,27 @@ body {
   font-weight: 400;
   color: #9CA3AF;
   margin: 1rem 0px;
+}
+
+.right {
+  padding: 1rem 2rem;
+}
+
+.mobile-br {
+  display: none;
+}
+
+.submit {
+  &:hover {
+    color: var(--lime);
+    background-color: transparent;
+    border: 1px solid var(--lime);
+  }
+}
+.cancel {
+  &:hover {
+    color: red;
+    background-color: transparent;
+    border: 1px solid red;
+  }
 }

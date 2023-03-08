@@ -1,15 +1,12 @@
-import { useState, useEffect, useRef, useContext } from "react";
-import useEth from "../../contexts/EthContext/useEth";
-import EthContext from "../../contexts/EthContext/EthContext";
+import { useState, useEffect, useRef } from "react";
+import DemoData from "./Data";
 
 function Arrow({ direction }) { return <i className={`fas fa-angle-left ${direction}`}></i> }
 
-function Calendar() {
-  const eth = useContext(EthContext);
-  const { state: { contract, accounts } } = useEth();
+function Demo() {
   const today = new Date();
 
-  const [calendarTitle, setCalendarTitle] = useState("CoolCalendarName");
+  const [calendarTitle, setCalendarTitle] = useState("DemoCalendar");
   const [calendarTitleInput, setCalendarTitleInput] = useState("");
   const [isEditingCalendarTitle, setIsEditingCalendarTitle] = useState(false);
 
@@ -23,9 +20,15 @@ function Calendar() {
   const [isAddingEvent, setIsAddingEvent] = useState(false);
 
   const [selectedDay, setSelectedDay] = useState(today);
-  const [dayEvents, setDayEvents] = useState([]);
+  const [dayEvents, setDayEvents] = useState([{
+    id: 0,
+    title: "#BUIDLathon: A jam-packed weekend of idea sharing, creative expression, round-the-clock #BUIDLing, and witnessing the future of blockchain innovation.",
+    startTime: Math.round(new Date().getTime() / 1000),
+    endTime: Math.round(new Date().getTime() / 1000) + 3600
+  }
+  ]);
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const spanEle = useRef(null);
 
   useEffect(() => {
@@ -45,12 +48,6 @@ function Calendar() {
 
   function showTitleInput() {
     setIsEditingCalendarTitle(true)
-  }
-
-  const sortEvents = (selectedEvents) => {
-    selectedEvents.sort(({ a, b }) => {
-      return a.startTime - b.startTime;
-    });
   }
 
   const firstDay = () => {
@@ -98,7 +95,7 @@ function Calendar() {
     return de
   }
 
-  const addEvent = async(e) => {
+  const addEvent = async (e) => {
     if (e.target.tagName === "INPUT") {
       return;
     }
@@ -132,10 +129,9 @@ function Calendar() {
       year: selectedYear(),
       month: selectedMonth()
     })
+
     setDayEvents(clone)
     setIsAddingEvent(false)
-
-    await contract.methods.addEvent(eventTitleInput, eventStartTime(), eventEndTime(), selectedYear(), selectedMonth()).send({ from: accounts[0] });
   }
 
   const selectedYear = () => { return selectedDay.getFullYear() }
@@ -151,9 +147,6 @@ function Calendar() {
       getMinutes(eventStartTimeInput)
     )
 
-    console.log(`startDate: ${startDate}`)
-    console.log(`eventStartTime() => ${Math.round(startDate.getTime() / 1000)}`)
-
     return Math.round(startDate.getTime() / 1000);
   }
 
@@ -166,10 +159,7 @@ function Calendar() {
       getMinutes(eventEndTimeInput)
     )
 
-      console.log(`endDate: ${endDate}`)
-      console.log(`eventEndTime() => ${Math.round(endDate.getTime() / 1000)}`)
-
-      return Math.round(endDate.getTime() / 1000);
+    return Math.round(endDate.getTime() / 1000);
   }
 
   const getHour = (timeInput) => {
@@ -213,6 +203,7 @@ function Calendar() {
       eventStartTimeField.current.classList.add("invalid-input");
     }
   };
+
   const handleEventEndTimeChange = e => {
     let timeInput = (e.target.value.substring(0, 8));
 
@@ -272,8 +263,6 @@ function Calendar() {
       return;
     }
     setCalendarTitle(calendarTitleInput);
-    setIsEditingCalendarTitle(false);
-    await contract.methods.updateTitle(calendarTitleInput).send({ from: accounts[0] });
   };
 
   const cancelCalendarTitleUpdate = () => {
@@ -293,17 +282,11 @@ function Calendar() {
 
   const updateActiveDay = (day) => {
     const prevDayNumber = selectedDay.getDate()
-
-    console.log(`previous: ${selectedDay}`)
     const diff = day.number - prevDayNumber
-
-    console.log(`new ${day.number} - prev ${prevDayNumber} = ${diff}`)
 
     selectedDay.setDate(selectedDay.getDate() + diff)
 
-    console.log(`new selectedDay: ${selectedDay}`)
-
-    setDayEvents(findDayEvents())
+    setDayEvents(DemoData(selectedYear(), selectedMonth(), selectedDayDate()))
   }
 
 
@@ -349,46 +332,28 @@ function Calendar() {
     return selectedDays;
   }
 
-  useEffect(() => {
-    if (contract != null) {
-      getCalendarTitle()
-      getEvents()
-    }
-  }, [eth.state.contract]);
+const timeRange = (startEpochSec, endEpochSec) => {
+  console.log(`timerange(${startEpochSec}, ${endEpochSec})`)
+  const start = humanizeTime(startEpochSec)
+  const end = humanizeTime(endEpochSec)
+  console.log(`=> start ${start}, end ${end}`)
 
-  const getCalendarTitle = async () => {
-    let value = await contract.methods.title().call({ from: accounts[0] });
-    if (value == "") {
-      value  = "CoolCalendarName"
-    }
-    setCalendarTitle(value);
-  };
+  return start + " - " + end
+}
 
-  const getEvents = async () => {
-    const events = await contract.methods.getAllEvents().call({ from: accounts[0] });
-    console.log(`getEvents => ${events}`)
-    setAllEvents(events)
-  };
+const humanizeTime = (epochSeconds) => {
+  let time = new Date(epochSeconds * 1000).toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
 
-  const timeRange = (startEpochSec, endEpochSec) => {
-    const start = humanizeTime(startEpochSec)
-    const end = humanizeTime(endEpochSec)
-
-    return start + " - " + end
+  if (time[0] === "0") {
+    time = time.substring(1)
   }
 
-  const humanizeTime = (epochSeconds) => {
-    let time = new Date(epochSeconds * 1000).toLocaleTimeString(undefined, {
-      hour: '2-digit',
-      minute: '2-digit',
-    })
+  return time
+}
 
-    if (time[0] === "0") {
-      time = time.substring(1)
-    }
-
-    return time
-  }
 
   return (
     <>
@@ -396,9 +361,9 @@ function Calendar() {
         <div className="left">
           <div className="calendar">
             <div className="month">
-              <Arrow direction="previous"/>
+              <Arrow direction="previous" />
               <h1 className="date">{months[selectedDay.getMonth()]} <span className="gradient-text">{selectedDay.getFullYear()}</span></h1>
-              <Arrow direction="next"/>
+              <Arrow direction="next" />
             </div>
             <div className="weekdays">
               {
@@ -432,7 +397,7 @@ function Calendar() {
           <div className="calendar-title-grid">
             <div className="calendar-title-grid-col">
               <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
-              <div className={`btns title-input-buttons ${isEditingCalendarTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
+              <div className={`btns title-input-buttons ${isEditingCalendarTitle ? "" : "hidden"}`} style={{ margin: "10px 0px" }}>
                 <div className="submit-container">
                   <div className="input-container">
                     <input
@@ -443,7 +408,7 @@ function Calendar() {
                       className="gradient-text"
                     />
                   </div>
-                  <div style={{display:"flex"}}>
+                  <div style={{ display: "flex" }}>
                     <button onClick={updateCalendarTitle} className="btn button-space submit">
                       <span className="underline">Submit</span>
                     </button>
@@ -460,75 +425,75 @@ function Calendar() {
               </div>
             </div>
           </div>
-          <div className="events" style={{height: "100vh"}}>
+          <div className="events" style={{ height: "100vh" }}>
             {
               isAddingEvent ?
-              <div className="today-date">
-                <div className="event-date">
-                  <h2>
-                      New event <br className="mobile-br"/>
-                      <span style={{ fontWeight: 400}}>
+                <div className="today-date">
+                  <div className="event-date">
+                    <h2>
+                      New event <br className="mobile-br" />
+                      <span style={{ fontWeight: 400 }}>
                         on {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
                       </span>
-                  </h2>
-                  <div>
-                    <button className="event-btn button-space submit" onClick={addEvent}>Submit</button>
-                    <button className="event-btn cancel" onClick={toggleNewEventForm}>Cancel</button>
+                    </h2>
+                    <div>
+                      <button className="event-btn button-space submit" onClick={addEvent}>Submit</button>
+                      <button className="event-btn cancel" onClick={toggleNewEventForm}>Cancel</button>
+                    </div>
                   </div>
-                </div>
-                <div className="input-row event-form">
-                  <div className="text-field">
-                    <label>Title</label>
-                    <input
-                      type="text"
-                      placeholder=""
-                      value={eventTitleInput}
-                      onChange={handleEventTitleChange}
-                    />
-                  </div>
-                </div>
-                <div className="input-row event-form">
-                  <div className="time-field" ref={eventStartTimeField}>
-                    <label>From</label>
-                    <input
-                      type="text"
-                      placeholder="HH:MM AM/PM"
-                      value={eventStartTimeInput}
-                      onChange={handleEventStartTimeChange}
-                    />
-                  </div>
-                  <div className="time-field" ref={eventEndTimeField}>
-                    <label>To</label>
-                    <input
-                      type="text"
-                      placeholder="HH:MM AM/PM"
-                      value={eventEndTimeInput}
-                      onChange={handleEventEndTimeChange}
+                  <div className="input-row event-form">
+                    <div className="text-field">
+                      <label>Title</label>
+                      <input
+                        type="text"
+                        placeholder=""
+                        value={eventTitleInput}
+                        onChange={handleEventTitleChange}
                       />
+                    </div>
                   </div>
-                </div>
-              </div> :
-              <div className="today-date">
-                <div className="event-date">
-                  <h2>
-                    {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
-                  </h2>
-                  <button className="event-btn--new" onClick={toggleNewEventForm}>Add Event</button>
-                </div>
-                {
-                  dayEvents.map((evt) => {
-                    console.log(`evt: ${JSON.stringify(evt)}`)
-                    const eventTitle = evt.title.substring(0, 37)
-                    const eventDescription = evt.title.substring(37)
-                    return (
-                      <div style={{ display: "flex", flexDirection: "row", paddingTop: "1.5rem" }} key={`event-${evt.id}`}>
-                        <div className="block"></div>
-                        <div>
-                          <h2 className="time-range">{timeRange(evt.startTime, evt.endTime)}</h2>
-                          <h3 className="event-title">{eventTitle} . . .</h3>
-                          <div className="event-description">...{eventDescription}</div>
+                  <div className="input-row event-form">
+                    <div className="time-field" ref={eventStartTimeField}>
+                      <label>From</label>
+                      <input
+                        type="text"
+                        placeholder="HH:MM AM/PM"
+                        value={eventStartTimeInput}
+                        onChange={handleEventStartTimeChange}
+                      />
+                    </div>
+                    <div className="time-field" ref={eventEndTimeField}>
+                      <label>To</label>
+                      <input
+                        type="text"
+                        placeholder="HH:MM AM/PM"
+                        value={eventEndTimeInput}
+                        onChange={handleEventEndTimeChange}
+                      />
+                    </div>
+                  </div>
+                </div> :
+                <div className="today-date">
+                  <div className="event-date">
+                    <h2>
+                      {weekdays[selectedDay.getDay()]}, {months[selectedDay.getMonth()]} {selectedDay.getDate()}
+                    </h2>
+                    <button className="event-btn--new" onClick={toggleNewEventForm}>Add Event</button>
+                  </div>
+                  {
+                    dayEvents.map((evt) => {
+                      console.log(`evt: ${JSON.stringify(evt)}`)
+                      const eventTitle = evt.title.substring(0, 50)
+                      const eventDescription = evt.title.substring(50)
+                      return (
+                        <div style={{ display: "flex", flexDirection: "row", paddingTop: "1.5rem" }} key={`event-${evt.id}`}>
+                          <div className="block"></div>
+                          <div style={{width: "90%"}}>
+                            <h2 className="time-range">{timeRange(evt.startTime, evt.endTime)}</h2>
+                            <h3 className="event-title">{eventTitle} . . .</h3>
+                            <div className="event-description">...{eventDescription}</div>
+                          </div>
                         </div>
-                      </div>
                       )
                     })
                   }
@@ -541,4 +506,5 @@ function Calendar() {
   );
 }
 
-export default Calendar;
+export default Demo;
+
