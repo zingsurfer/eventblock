@@ -22,7 +22,7 @@ function Demo() {
   const [selectedDay, setSelectedDay] = useState(today);
   const [dayEvents, setDayEvents] = useState([{
     id: 0,
-    title: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu lectus ut nibh mattis volutpat et bibendum risus.",
+    title: "#BUIDLathon: A jam-packed weekend of idea sharing, creative expression, round-the-clock #BUIDLing, and witnessing the future of blockchain innovation.",
     startTime: Math.round(new Date().getTime() / 1000),
     endTime: Math.round(new Date().getTime() / 1000) + 3600
   }
@@ -483,12 +483,12 @@ const humanizeTime = (epochSeconds) => {
                   {
                     dayEvents.map((evt) => {
                       console.log(`evt: ${JSON.stringify(evt)}`)
-                      const eventTitle = evt.title.substring(0, 37)
-                      const eventDescription = evt.title.substring(37)
+                      const eventTitle = evt.title.substring(0, 50)
+                      const eventDescription = evt.title.substring(50)
                       return (
                         <div style={{ display: "flex", flexDirection: "row", paddingTop: "1.5rem" }} key={`event-${evt.id}`}>
                           <div className="block"></div>
-                          <div>
+                          <div style={{width: "90%"}}>
                             <h2 className="time-range">{timeRange(evt.startTime, evt.endTime)}</h2>
                             <h3 className="event-title">{eventTitle} . . .</h3>
                             <div className="event-description">...{eventDescription}</div>

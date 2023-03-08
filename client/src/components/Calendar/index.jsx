@@ -272,6 +272,7 @@ function Calendar() {
       return;
     }
     setCalendarTitle(calendarTitleInput);
+    setIsEditingCalendarTitle(false);
     await contract.methods.updateTitle(calendarTitleInput).send({ from: accounts[0] });
   };
 
