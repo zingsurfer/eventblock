@@ -13,6 +13,19 @@ body {
   margin-right: 1rem;
 }
 
+.time-range {
+  margin-bottom: 0.5rem;
+  color: #f0fdfa;
+}
+
+.block {
+  margin-right: 1rem;
+  margin-top: 4px;
+  height: 1rem;
+  width: 1rem;
+  background-color: #f0fdfa;
+}
+
 #cal {
   display: flex;
   min-height: 850px;
@@ -20,6 +33,7 @@ body {
   padding: 5px;
   color: #fff;
   display: flex;
+
 
   .left {
     width: 60%;
@@ -587,7 +601,7 @@ body {
 }
 
 .event-title {
-  color: #f0fdfa;
+  color: #9CA3AF;
 }
 
 .event-description {

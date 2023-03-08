@@ -503,8 +503,9 @@ function Calendar() {
                     const eventDescription = evt.title.substring(37)
                     return (
                       <div style={{ display: "flex", flexDirection: "row", paddingTop: "1.5rem" }} key={`event-${evt.id}`}>
-                        <span style={{ marginRight: "1rem" }}>⬜️</span>
+                        <div className="block"></div>
                         <div>
+                          <h2 className="time-range">10:00 AM - 11:00 AM</h2>
                           <h3 className="event-title">{eventTitle} . . .</h3>
                           <div className="event-description">...{eventDescription}</div>
                         </div>
