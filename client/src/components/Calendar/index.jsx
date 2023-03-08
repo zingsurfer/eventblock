@@ -11,13 +11,18 @@ function Calendar() {
   const today = new Date();
 
   const [calendarTitle, setCalendarTitle] = useState("CoolCalendarName");
-  const [titleInput, setTitleInput] = useState("");
+  const [calendarTitleInput, setCalendarTitleInput] = useState("");
+  const [isEditingCalendarTitle, setIsEditingCalendarTitle] = useState(false);
 
   const [allEvents, setAllEvents] = useState([]);
 
-  const [eventInput, setEventInput] = useState("");
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isAddingEvent, setIsAddingEvent] = useState(true);
+  const [eventTitleInput, setEventTitleInput] = useState("");
+  const [eventStartTimeInput, setEventStartTimeInput] = useState("");
+  const eventStartTimeField = useRef(null);
+  const eventEndTimeField = useRef(null);
+  const [eventEndTimeInput, setEventEndTimeInput] = useState("");
+  const [isAddingEvent, setIsAddingEvent] = useState(false);
+
   const [isDemo, setIsDemo] = useState(false);
 
   const [selectedDay, setSelectedDay] = useState(today);
@@ -27,11 +32,22 @@ function Calendar() {
   const spanEle = useRef(null);
 
   useEffect(() => {
-    setIsEditingTitle(false)
+    setIsEditingCalendarTitle(false)
   }, [calendarTitle]);
 
+  useEffect(() => {
+    if (isCompleteTimeInput()) {
+      console.log(`isValidRange() => ${isValidRange()}`)
+      if (isValidRange()) {
+        eventEndTimeField.current.classList.remove("invalid-range");
+      } else {
+        eventEndTimeField.current.classList.add("invalid-range");
+      }
+    }
+  }, [eventStartTimeInput, eventEndTimeInput]);
+
   function showTitleInput() {
-    setIsEditingTitle(true)
+    setIsEditingCalendarTitle(true)
   }
 
   const sortEvents = (selectedEvents) => {
@@ -89,21 +105,80 @@ function Calendar() {
     if (e.target.tagName === "INPUT") {
       return;
     }
-    if (eventInput === "") {
-      alert("Please enter a event");
+
+    let missingInputs = []
+    const inputs = {
+      title: eventTitleInput,
+      start: eventStartTimeInput,
+      end: eventEndTimeInput,
+    }
+
+    Object.keys(inputs).forEach((name) => {
+      if (inputs[name] === "") {
+        missingInputs.push(name)
+      }
+    })
+
+    if (missingInputs.length > 0) {
+      const missingInputList = [missingInputs.slice(0, -1).join(", "), missingInputs.slice(-1)[0]].join(missingInputs.length > 1 ? ", and " : "");
+      alert(`Please enter event ${missingInputList}.`)
       return;
     }
 
     const prevEvents = dayEvents
     const clone = [...prevEvents]
-    clone.push({ id: prevEvents.length, title: eventInput })
+    clone.push({ id: prevEvents.length, title: eventTitleInput })
     setDayEvents(clone)
     setIsAddingEvent(false)
 
-    const startTime = Math.round(selectedDay.getTime() / 1000);
-    const endTime = Math.round(selectedDay.getTime() / 1000) + 3600;
+    await contract.methods.addEvent(eventTitleInput, eventStartTime(), eventEndTime(), selectedYear(), selectedMonth()).send({ from: accounts[0] });
+  }
 
-    await contract.methods.addEvent(eventInput, startTime, endTime, selectedDay.getFullYear(), selectedDay.getMonth()).send({ from: accounts[0] });
+  const selectedYear = () => { return selectedDay.getFullYear() }
+  const selectedMonth = () => { return selectedDay.getMonth() }
+  const selectedDayDate = () => { return selectedDay.getDate() }
+
+  const eventStartTime = () => {
+    const startDate = new Date(
+      selectedYear(),
+      selectedMonth(),
+      selectedDayDate(),
+      getHour(eventStartTimeInput),
+      getMinutes(eventStartTimeInput)
+    )
+
+    console.log(`startDate: ${startDate}`)
+    console.log(`eventStartTime() => ${Math.round(startDate.getTime() / 1000)}`)
+
+    return Math.round(startDate.getTime() / 1000);
+  }
+
+  const eventEndTime = () => {
+    const endDate = new Date(
+      selectedYear(),
+      selectedMonth(),
+      selectedDayDate(),
+      getHour(eventEndTimeInput),
+      getMinutes(eventEndTimeInput)
+    )
+
+      console.log(`endDate: ${endDate}`)
+      console.log(`eventEndTime() => ${Math.round(endDate.getTime() / 1000)}`)
+
+      return Math.round(endDate.getTime() / 1000);
+  }
+
+  const getHour = (timeInput) => {
+    let hour = parseInt(timeInput.slice(0, 2))
+    if (timeInput.slice(-2) === "PM") {
+      hour += 12
+    }
+    console.log(`getHour(${timeInput}) #=> ${hour}`)
+    return hour
+  }
+
+  const getMinutes = (timeInput) => {
+    return parseInt(timeInput.slice(3, 5))
   }
 
   const findDayEvents = () => {
@@ -111,31 +186,93 @@ function Calendar() {
     return de[selectedDay.getDate()] || []
   }
 
-  const handleInputChange = e => {
-    if (/^[a-zA-Z ]*$/.test(e.target.value)) {
-      setTitleInput(e.target.value);
+  const handleCalendarTitleChange = e => {
+    setCalendarTitleInput(e.target.value);
+  };
+
+  const handleEventTitleChange = e => {
+    setEventTitleInput(e.target.value);
+  };
+
+  const handleEventStartTimeChange = e => {
+    let timeInput = (e.target.value.substring(0, 8));
+
+    // Insert missing space to standardize time input
+    if (timeInput.length > 5 && /[a-zA-Z]/.test(timeInput[5])) {
+      timeInput = timeInput.substring(0, 5) + " " + timeInput.substring(5, 7)
+    }
+    setEventStartTimeInput(timeInput)
+
+    if (isValidTimeInput(timeInput)) {
+      eventStartTimeField.current.classList.remove("invalid-input");
+    } else {
+      eventStartTimeField.current.classList.add("invalid-input");
     }
   };
-  const handleEventChange = e => {
-    if (/^[a-zA-Z ]*$/.test(e.target.value)) {
-      setEventInput(e.target.value);
+  const handleEventEndTimeChange = e => {
+    let timeInput = (e.target.value.substring(0, 8));
+
+    // Insert missing space to standardize time input
+    if (timeInput.length > 5 && /[a-zA-Z]/.test(timeInput[5])) {
+      timeInput = timeInput.substring(0, 5) + " " + timeInput.substring(5, 7)
+    }
+    setEventEndTimeInput(timeInput)
+
+    if (isValidTimeInput(timeInput)) {
+      eventEndTimeField.current.classList.remove("invalid-input");
+    } else {
+      eventEndTimeField.current.classList.add("invalid-input");
     }
   };
 
-  const updateTitle = async e => {
+  const isValidRange = () => {
+    return eventStartTime() < eventEndTime();
+  }
+
+  const isCompleteTimeInput = () => {
+    return (eventStartTimeInput.length === 8 && eventEndTimeInput.length === 8) && (
+      /^(0[0-9]|1[0-2]):[0-5][0-9] [AaPp][Mm]$/.test(eventStartTimeInput) &&
+      /^(0[0-9]|1[0-2]):[0-5][0-9] [AaPp][Mm]$/.test(eventEndTimeInput)
+    )
+  }
+
+  const isValidTimeInput = (timeInput) => {
+    switch (timeInput.length) {
+      case 0:
+        return true; // ""
+      case 1:
+        return /^[0-1]/ // "1"
+      case 2:
+        return /0(?=[1-9])|1(?=[0-2])/.test(timeInput); // "12"
+      case 3:
+        return /^(0[0-9]|1[0-2]):$/.test(timeInput); // "12:"
+      case 4:
+        return /^(0[0-9]|1[0-2]):[0-5]$/.test(timeInput); // "12:3"
+      case 5:
+        return /^(0[0-9]|1[0-2]):[0-5][0-9]$/.test(timeInput); // "12:34"
+      case 6:
+        return /^(0[0-9]|1[0-2]):[0-5][0-9] $/.test(timeInput); // "12:34 "
+      case 7:
+        return /^(0[0-9]|1[0-2]):[0-5][0-9] [AaPp]$/.test(timeInput); // "12:34 P"
+      case 8:
+        return /^(0[0-9]|1[0-2]):[0-5][0-9] [AaPp][Mm]$/.test(timeInput); // "12:34 PM"
+    }
+  }
+
+  const updateCalendarTitle = async e => {
     if (e.target.tagName === "INPUT") {
       return;
     }
-    if (titleInput === "") {
+    if (calendarTitleInput === "") {
       alert("Please enter a title");
       return;
     }
-    setCalendarTitle(titleInput);
-    await contract.methods.updateTitle(titleInput).send({ from: accounts[0] });
+    setCalendarTitle(calendarTitleInput);
+    await contract.methods.updateCalendarTitle(calendarTitleInput).send({ from: accounts[0] });
   };
 
-  const cancelTitleUpdate = () => {
-    setIsEditingTitle(false);
+  const cancelCalendarTitleUpdate = () => {
+    setIsEditingCalendarTitle(false);
   }
 
   const toggleNewEventForm = () => {
@@ -277,30 +414,30 @@ function Calendar() {
           <div className="calendar-title-grid">
             <div className="calendar-title-grid-col">
               <img className="logo" src="https://i.imgur.com/IoKG3DP.png" alt="logo" />
-              <div className={`btns title-input-buttons ${isEditingTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
+              <div className={`btns title-input-buttons ${isEditingCalendarTitle ? "" : "hidden"}`} style={{margin: "10px 0px"}}>
                 <div className="input-row">
                   <div className="input-container">
                     <input
                       type="text"
                       placeholder="Calendar title"
-                      value={titleInput}
-                      onChange={handleInputChange}
+                      value={calendarTitleInput}
+                      onChange={handleCalendarTitleChange}
                       className="gradient-text"
                     />
                   </div>
                   <div style={{display:"flex"}}>
-                    <button onClick={updateTitle} className="btn button-space">
+                    <button onClick={updateCalendarTitle} className="btn button-space">
                       <span className="underline">Submit</span>
                     </button>
-                    <button onClick={cancelTitleUpdate} className="btn button-space">
+                    <button onClick={cancelCalendarTitleUpdate} className="btn button-space">
                       <span className="underline">Cancel</span>
                     </button>
                   </div>
                 </div>
               </div>
-              <div className={`calendar-title ${isEditingTitle ? "hidden" : "title"}`}>
-                <h1><span className="gradient-text" ref={spanEle}>EventBlock</span></h1>
-                <h1>{calendarTitle}</h1>
+              <div className={`calendar-title ${isEditingCalendarTitle ? "hidden" : "title"}`}>
+                <h1><span className="gradient-text">EventBlock</span></h1>
+                <h1 ref={spanEle}>{calendarTitle}</h1>
                 <button className="input-link" onClick={showTitleInput} ><span className="underline">edit</span></button>
               </div>
             </div>
@@ -327,29 +464,29 @@ function Calendar() {
                     <input
                       type="text"
                       placeholder=""
-                      value={eventInput}
-                      onChange={handleEventChange}
+                      value={eventTitleInput}
+                      onChange={handleEventTitleChange}
                     />
                   </div>
                 </div>
                 <div className="input-row event-form">
-                  <div className="time-field">
+                  <div className="time-field" ref={eventStartTimeField}>
                     <label>From</label>
                     <input
                       type="text"
                       placeholder="HH:MM AM/PM"
-                      value={eventInput}
-                      onChange={handleEventChange}
+                      value={eventStartTimeInput}
+                      onChange={handleEventStartTimeChange}
                     />
                   </div>
-                  <div className="time-field">
+                  <div className="time-field" ref={eventEndTimeField}>
                     <label>To</label>
                     <input
                       type="text"
                       placeholder="HH:MM AM/PM"
-                      value={eventInput}
-                      onChange={handleEventChange}
-                    />
+                      value={eventEndTimeInput}
+                      onChange={handleEventEndTimeChange}
+                      />
                   </div>
                 </div>
               </div> :

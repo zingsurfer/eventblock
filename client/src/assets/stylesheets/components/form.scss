@@ -65,3 +65,41 @@
     font-size: 1.75rem;
   }
 }
+
+.invalid-input {
+  input {
+    color: #fd5f00;
+  }
+
+  label {
+    color: #fd5f00;
+  }
+
+  input:focus {
+    border: 3px solid #fd5f00;
+  }
+
+  label::after {
+    content: ' ─ invalid format';
+    font-style: italic;
+  }
+}
+
+.invalid-range {
+  input {
+    color: red;
+  }
+
+  label {
+    color: red;
+  }
+
+  input:focus {
+    border: 3px solid red;
+  }
+
+  label::after {
+    content: ' ─ invalid range';
+    font-style: italic;
+  }
+}
