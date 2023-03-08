@@ -32,8 +32,11 @@ test: # Run contract tests.
 dev_deploy: # Compile and deploy contracts to localhost.
 	cd truffle && truffle migrate --network development
 
-test_deploy: # Compile and deploy contracts to Aurora testnet.
+aurora_test_deploy: # Compile and deploy contracts to Aurora testnet.
 	cd truffle && truffle migrate --network auroratestnet
+
+opera_test_deploy: # Compile and deploy contracts to Opera testnet.
+	cd truffle && truffle migrate --network operatestnet
 
 build_client: # Bundle client assets.
 	cd client && yarn run build
