@@ -79,6 +79,20 @@ module.exports = {
       network_id: 0x4e454153, // Aurora testnet ID
       gas: 10000000
     },
+    operatestnet: {
+      provider: () =>
+      new HDWalletProvider(
+        MNEMONIC,
+        `https://rpcapi-tracing.testnet.fantom.network`
+        ),
+      network_id: 4002
+    },
+    operamainnet: {
+      provider: () =>
+        new HDWalletProvider(MNEMONIC, 'https://rpcapi.fantom.network'),
+      network_id: 250,
+      gasPrice: 470000000000,
+    },
     polygon: {
       provider: () =>
         new HDWalletProvider(
@@ -96,7 +110,7 @@ module.exports = {
           MNEMONIC,
           `https://rpc-mumbai.maticvigil.com/v3/${INFURA_KEY}`
         ),
-      network_id: 80001, // Aurora testnet ID
+      network_id: 80001,
       gas: 10000000
     },
     matic: {
@@ -106,7 +120,7 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true
     },
-    
+
     //
     // An additional network, but with some advanced options…
     // advanced: {
