@@ -372,6 +372,26 @@ function Calendar() {
     setAllEvents(events)
   };
 
+  const timeRange = (startEpochSec, endEpochSec) => {
+    let start = humanizeTime(startEpochSec)
+    let end = humanizeTime(endEpochSec)
+
+    return start + " - " + end
+  }
+
+  const humanizeTime = (epochSeconds) => {
+    let time = new Date(epochSeconds * 1000).toLocaleTimeString(undefined, {
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+
+    if (time[0] === "0") {
+      time = time.substring(1)
+    }
+
+    return time
+  }
+
   return (
     <>
       <div id="cal" className="container">
@@ -505,7 +525,7 @@ function Calendar() {
                       <div style={{ display: "flex", flexDirection: "row", paddingTop: "1.5rem" }} key={`event-${evt.id}`}>
                         <div className="block"></div>
                         <div>
-                          <h2 className="time-range">10:00 AM - 11:00 AM</h2>
+                          <h2 className="time-range">{timeRange(evt.startTime, evt.endTime)}</h2>
                           <h3 className="event-title">{eventTitle} . . .</h3>
                           <div className="event-description">...{eventDescription}</div>
                         </div>
